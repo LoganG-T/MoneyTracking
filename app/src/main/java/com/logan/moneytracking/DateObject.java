@@ -18,9 +18,16 @@ public class DateObject {
     }
     public DateObject(Calendar c){
         setDay(c.get(Calendar.DAY_OF_WEEK) - 1);
-        month = getMonthString(c.get(Calendar.MONTH));
-        week = c.get(Calendar.WEEK_OF_YEAR);
-        year = c.get(Calendar.YEAR);
+        if(getDay().equals("Sunday")){
+            c.add(Calendar.DAY_OF_WEEK, -1);
+            month = getMonthString(c.get(Calendar.MONTH));
+            week = c.get(Calendar.WEEK_OF_YEAR);
+            year = c.get(Calendar.YEAR);
+        }else {
+            month = getMonthString(c.get(Calendar.MONTH));
+            week = c.get(Calendar.WEEK_OF_YEAR);
+            year = c.get(Calendar.YEAR);
+        }
     }
     public DateObject(JSONObject json) throws JSONException {
         day = json.getString("day");

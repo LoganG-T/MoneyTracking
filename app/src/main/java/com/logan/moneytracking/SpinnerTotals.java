@@ -72,6 +72,7 @@ public class SpinnerTotals extends AppCompatActivity implements AdapterView.OnIt
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
         //Need to minus 1 because it is zero-index'd
+        current_date.setWeek(this_week - 1);
         spinner.setSelection(this_week - 1);
     }
 

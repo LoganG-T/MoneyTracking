@@ -59,6 +59,7 @@ public class JsonHandler {
 
         //Given json is a json string of the year, week number and the days_spending information to add
         //Example given_json format is { "year":2020, "week":1, "weekday":"Monday", "amount":[1,2,3], "notes"["x","y","z"] }
+        System.out.println(given_json);
         try {
             JSONObject json_obj = new JSONObject(given_json);
 
@@ -280,10 +281,8 @@ public class JsonHandler {
         }
         System.out.println(year_obj.toString());
         JSONArray week_array = year_obj.getJSONArray("week");
-        int index = 0;
         for(int i = 0; i < week_array.length(); i++){
             if(week_array.getInt(i) == week) {
-                index = i;
                 return i;
             }
         }

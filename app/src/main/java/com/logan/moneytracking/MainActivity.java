@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.logan.R;
@@ -20,11 +21,15 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
 
     JsonHandler jsonHandler;
     SaveLoad sl;
+    SpinnerPayWeek spinnerWeek;
+    DateObject dateObject;
+    AddPayment addPayment;
 
     public MainActivity(){
         jsonHandler = null;
@@ -36,16 +41,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         sl = new SaveLoad();
-
-
-        /*
-        add_pay_layout("10", 1, (LinearLayout) findViewById(R.id.payment_layout));
-        add_pay_layout("11", 2, (LinearLayout) findViewById(R.id.payment_layout));
-        add_pay_layout("12", 3, (LinearLayout) findViewById(R.id.payment_layout));
-        add_pay_layout("13", 4, (LinearLayout) findViewById(R.id.payment_layout));
-        add_pay_layout("14", 5, (LinearLayout) findViewById(R.id.payment_layout));
-        add_pay_layout("15", 6, (LinearLayout) findViewById(R.id.payment_layout));
-         */
 
         boolean isFilePresent = sl.check_file(getApplicationContext(), "storage.json");
         if(isFilePresent) {
@@ -74,15 +69,27 @@ public class MainActivity extends AppCompatActivity {
             jsonHandler = new JsonHandler(getApplicationContext(), "storage.json", sl);
 
 
-            final LoadPage loadPage = new LoadPage(MainActivity.this, jsonHandler);
+            //final LoadPage loadPage = new LoadPage(MainActivity.this, jsonHandler);
 
-            DropDown dd = new DropDown(MainActivity.this, this, loadPage);
-            dd.main_call_this(2020);
 
-            loadPage.load_plus_button();
+            //DropDown dd = new DropDown(MainActivity.this, this, loadPage);
+            //dd.main_call_this(2020);
 
-            loadPage.load_day_buttons(loadPage);
+            Calendar calendar = Calendar.getInstance();
+            dateObject = new DateObject(calendar);
 
+            addPayment = new AddPayment(MainActivity.this, jsonHandler, dateObject);
+
+            spinnerWeek = new SpinnerPayWeek(this, getApplicationContext(), dateObject);
+            spinnerWeek.spinner_setup(dateObject.getYear(), R.id.spinner1);
+
+            addPayment.load_plus_button();
+
+            //loadPage.load_plus_button();
+
+            //loadPage.load_day_buttons(loadPage);
+
+            Load_Week(dateObject.getWeek() + 1);
         } catch (JSONException e) {
             e.printStackTrace();
             //Big error restart the program again and display error message
@@ -95,15 +102,33 @@ public class MainActivity extends AppCompatActivity {
         //sl.delete_file(getApplicationContext(), "storage.json");
     }
 
+    public void Next_Week(View view){
 
-    public void launchBudget(View view) {
-        Intent intent = new Intent(this, BudgetActivityMain.class);
-        //EditText editText = (EditText) findViewById(R.id.editText);
-        //String message = editText.getText().toString();
-        //intent.putExtra("jsKey", jsonHandler);
-        //sl.Save_Data(getApplicationContext(), jsonHandler);
+        Spinner spin = (Spinner) findViewById(R.id.spinner1);
+        spin.setSelection(dateObject.getWeek() + 1, false);
 
-        startActivity(intent);
+        try {
+            Load_Week(dateObject.getWeek() + 1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void Prev_Week(View view){
+        Spinner spin = (Spinner) findViewById(R.id.spinner1);
+        spin.setSelection(dateObject.getWeek() - 1, false);
+
+        try {
+            Load_Week(dateObject.getWeek() - 1);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void Load_Week(int new_week) throws JSONException {
+        JSONArray jsonArray = jsonHandler.get_week(dateObject.getYear(), new_week);
+        addPayment.load_another_week(jsonArray, (LinearLayout) findViewById(R.id.payment_layout));
+
     }
 
 }

@@ -10,7 +10,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:windowSoftInputMode="adjustPan">
-        <activity android:name=".moneytracking.MainActivity">
+        <activity android:name=".moneytracking.ActivityHomePage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -18,46 +18,53 @@
             </intent-filter>
         </activity>
         <activity android:name=".moneytracking.TotalActivity"
-            android:parentActivityName=".moneytracking.MainActivity">
+            android:parentActivityName=".moneytracking.ActivityHomePage">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".moneytracking.MainActivity" />
+                android:value=".moneytracking.ActivityHomePage" />
+        </activity>
+        <activity android:name=".moneytracking.MainActivity"
+            android:parentActivityName=".moneytracking.ActivityHomePage">
+            <!-- The meta-data tag is required if you support API level 15 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".moneytracking.ActivityHomePage" />
         </activity>
         <activity android:name=".budget.BudgetActivity"
-            android:parentActivityName=".moneytracking.MainActivity">
+            android:parentActivityName=".moneytracking.ActivityHomePage">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".moneytracking.MainActivity" />
+                android:value=".moneytracking.ActivityHomePage" />
         </activity>
         <activity android:name=".budget.BudgetActivityMain"
-            android:parentActivityName=".moneytracking.MainActivity">
+            android:parentActivityName=".moneytracking.ActivityHomePage">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".moneytracking.MainActivity" />
+                android:value=".moneytracking.ActivityHomePage" />
         </activity>
         <activity android:name=".budget.BudgetViewActivity"
-            android:parentActivityName=".moneytracking.MainActivity">
+            android:parentActivityName=".moneytracking.ActivityHomePage">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".moneytracking.MainActivity" />
+                android:value=".moneytracking.ActivityHomePage" />
         </activity>
         <activity android:name=".moneytracking.NotesActivity"
-            android:parentActivityName=".moneytracking.MainActivity">
+            android:parentActivityName=".moneytracking.ActivityHomePage">
         <!-- The meta-data tag is required if you support API level 15 and lower -->
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value=".moneytracking.MainActivity"/>
+            android:value=".moneytracking.ActivityHomePage"/>
         </activity>
         <activity android:name=".budget.BudgetEditActivity"
-            android:parentActivityName=".moneytracking.MainActivity">
+            android:parentActivityName=".moneytracking.ActivityHomePage">
             <!-- The meta-data tag is required if you support API level 15 and lower -->
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".moneytracking.MainActivity"/>
+                android:value=".moneytracking.ActivityHomePage"/>
         </activity>
 
     </application>

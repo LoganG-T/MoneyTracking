@@ -41,7 +41,7 @@ public class LoadPage {
     private int current_week = 1;//7 is February
     private String current_day = "Monday";
 
-    public void load_day_buttons(final LoadPage loadPage){
+    /*public void load_day_buttons(final LoadPage loadPage){
         loadPage.load_another_day(current_day, (LinearLayout) activity.findViewById(R.id.payment_layout));
         Button b = (Button)activity.findViewById(R.id.day_1);
         b.setOnClickListener(new View.OnClickListener(){
@@ -114,7 +114,7 @@ public class LoadPage {
                 lp.load_another_day("Sunday", (LinearLayout) activity.findViewById(R.id.payment_layout));
             }
         });
-    }
+    }*/
 
     public void load_plus_button(){
         ImageButton b = (ImageButton) activity.findViewById(R.id.imageButton);
@@ -227,7 +227,7 @@ public class LoadPage {
     }
 
 
-    public void set_dates(){
+    /*public void set_dates(){
         String[] dates = get_date(current_year, current_week);
 
         Button b1 = (Button)activity.findViewById(R.id.day_1);
@@ -248,7 +248,7 @@ public class LoadPage {
         current_day = "Monday";
 
         load_another_day("Monday", (LinearLayout) activity.findViewById(R.id.payment_layout));
-    }
+    }*/
 
     private String payment_toString(String payment, String note){
         return "{ \"year\":" + current_year + ", \"week\": " + current_week +

@@ -8,6 +8,8 @@ import java.util.ArrayList;
 
 public class NotesFunctions {
 
+    String inc_all = "All";
+
     public NotesFunctions(){
         spending_notes = new ArrayList<SpendingCount>();
         total_spending = 0f;
@@ -93,6 +95,9 @@ public class NotesFunctions {
     }
 
     public float Get_NotesTotal(String given_note){
+        if(given_note.equals(inc_all)){
+            return total_spending;
+        }
         for(int i = 0; i < spending_notes.size(); i++){
             if(spending_notes.get(i).check_note(given_note)){
                 return spending_notes.get(i).getSpending();
@@ -124,9 +129,10 @@ public class NotesFunctions {
 
 
     public String[] Get_NotesNames(){
-        String[] s = new String[spending_notes.size()];
+        String[] s = new String[spending_notes.size() + 1];
+        s[0] = inc_all;
         for(int i = 0; i < spending_notes.size(); i++){
-            s[i] = spending_notes.get(i).getNote();
+            s[i + 1] = spending_notes.get(i).getNote();
         }
         return s;
     }

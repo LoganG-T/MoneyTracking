@@ -17,6 +17,8 @@ public class SpinnerWeek extends SpinnerTotals {
         current_date = d;
     }
 
+    //Call spinner_setup(int given_year, int given_spinner)
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 

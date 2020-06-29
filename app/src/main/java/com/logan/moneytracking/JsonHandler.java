@@ -75,48 +75,60 @@ public class JsonHandler {
 
             //Accessing the week / week-index position
             JSONArray week_array = selected_obj.getJSONArray("week");
-            int week_index = 0;
+            int week_index = -1;
             for(int i = 0; i < week_array.length(); i++){
                 if(week_array.getInt(i) == json_obj.getInt("week")){
                     week_index = i;
                     break;
                 }
             }
-
-            //Accessing the weekday of the week required
-            //System.out.println("Before " + selected_obj.toString());
-            System.out.println("Before " + current_json.toString());
-            JSONArray weeks_spending = selected_obj.getJSONArray("days").getJSONArray(week_index);
-            JSONObject spending_data = null;
-            for(int i = 0; i < weeks_spending.length(); i++){
-                System.out.println("SAME DAY FOUND " + i);
-                System.out.println(weeks_spending.getJSONObject(i).getString("weekday") + " " + json_obj.getString("weekday"));
-                if(weeks_spending.getJSONObject(i).getString("weekday").equals(json_obj.getString("weekday"))){
-                    //Add spending
-                    spending_data = weeks_spending.getJSONObject(i).getJSONObject("day_spending");
-                    JSONArray amount_ar = json_obj.getJSONArray("amount");
-                    JSONArray notes_ar = json_obj.getJSONArray("notes");
-                    JSONArray current_amount = spending_data.getJSONArray("spending");
-                    JSONArray current_notes = spending_data.getJSONArray("notes");
-                    for(int ar = 0; ar < amount_ar.length(); ar++){
-                        current_amount.put(amount_ar.getString(ar));
-                        current_notes.put(notes_ar.getString(ar));
-                    }
-                    spending_data.put("spending", current_amount);
-                    spending_data.put("notes", current_notes);
-
-                    //SpendingData current_spending = new SpendingData(spending_data.getJSONArray("amount"), spending_data.getJSONArray("notes"));
-                    break;
-                }
-            }
-
-            if(spending_data == null){
-                //insert new weekday data
-                WeekdayData wdd = new WeekdayData();
-                wdd.set_Weekday(json_obj.getString("weekday"));
+            if(week_index == -1){
+                JSONArray weeks = selected_obj.getJSONArray("week");
+                JSONArray weeks_spending = selected_obj.getJSONArray("days");
+                JSONArray new_data = new JSONArray();
+                WeekdayData wdd = new WeekdayData(json_obj.getString("weekday"), json_obj.getString("month"));
+                /*wdd.set_Weekday(json_obj.getString("weekday"));
+                wdd.set_Month(json_obj.getString("month"));*/
                 SpendingData spendingData = new SpendingData(json_obj.getJSONArray("amount"), json_obj.getJSONArray("notes"));
                 wdd.set_Spending(spendingData);
-                weeks_spending.put(new JSONObject(wdd.toString()));
+                new_data.put(new JSONObject(wdd.toString()));
+                weeks_spending.put(new_data);
+                weeks.put(json_obj.getInt("week"));
+            }else {
+                //Accessing the weekday of the week required
+                //System.out.println("Before " + selected_obj.toString());
+                System.out.println("Before " + current_json.toString());
+                JSONArray weeks_spending = selected_obj.getJSONArray("days").getJSONArray(week_index);
+                JSONObject spending_data = null;
+                for (int i = 0; i < weeks_spending.length(); i++) {
+                    System.out.println("SAME DAY FOUND " + i);
+                    System.out.println(weeks_spending.getJSONObject(i).getString("weekday") + " " + json_obj.getString("weekday"));
+                    if (weeks_spending.getJSONObject(i).getString("weekday").equals(json_obj.getString("weekday"))) {
+                        //Add spending
+                        spending_data = weeks_spending.getJSONObject(i).getJSONObject("day_spending");
+                        JSONArray amount_ar = json_obj.getJSONArray("amount");
+                        JSONArray notes_ar = json_obj.getJSONArray("notes");
+                        JSONArray current_amount = spending_data.getJSONArray("spending");
+                        JSONArray current_notes = spending_data.getJSONArray("notes");
+                        for (int ar = 0; ar < amount_ar.length(); ar++) {
+                            current_amount.put(amount_ar.getString(ar));
+                            current_notes.put(notes_ar.getString(ar));
+                        }
+                        spending_data.put("spending", current_amount);
+                        spending_data.put("notes", current_notes);
+
+                        //SpendingData current_spending = new SpendingData(spending_data.getJSONArray("amount"), spending_data.getJSONArray("notes"));
+                        break;
+                    }
+                }
+
+                if (spending_data == null) {
+                    //insert new weekday data
+                    WeekdayData wdd = new WeekdayData(json_obj.getString("weekday"), json_obj.getString("month"));
+                    SpendingData spendingData = new SpendingData(json_obj.getJSONArray("amount"), json_obj.getJSONArray("notes"));
+                    wdd.set_Spending(spendingData);
+                    weeks_spending.put(new JSONObject(wdd.toString()));
+                }
             }
 
 
@@ -345,6 +357,7 @@ public class JsonHandler {
         JSONObject day_obj = get_chosen_day(given_json.getString("weekday"), given_json.getInt("week"), given_json.getInt("year"));
 
         int index = given_json.getInt("index");
+        System.out.println("JSONHANDLER LINE 360 - " + index + " " + day_obj.getJSONArray("spending").getString(0) + " " + day_obj.getJSONArray("spending").getString(index));
         day_obj.getJSONArray("spending").remove(index);
         day_obj.getJSONArray("notes").remove(index);
 

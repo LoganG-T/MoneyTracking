@@ -105,10 +105,12 @@ public class MainActivity extends AppCompatActivity {
     public void Next_Week(View view){
 
         Spinner spin = (Spinner) findViewById(R.id.spinner1);
-        spin.setSelection(dateObject.getWeek() + 1, false);
+        dateObject.update_week(1);
+        spin.setSelection(dateObject.getWeek() - 1, false);
 
         try {
-            Load_Week(dateObject.getWeek() + 1);
+
+            Load_Week(dateObject.getWeek());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -116,19 +118,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void Prev_Week(View view){
         Spinner spin = (Spinner) findViewById(R.id.spinner1);
+        dateObject.update_week(-1);
         spin.setSelection(dateObject.getWeek() - 1, false);
 
         try {
-            Load_Week(dateObject.getWeek() - 1);
+
+            Load_Week(dateObject.getWeek());
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
     private void Load_Week(int new_week) throws JSONException {
+        System.out.println("LOAD WEEK " + new_week);
         JSONArray jsonArray = jsonHandler.get_week(dateObject.getYear(), new_week);
         addPayment.load_another_week(jsonArray, (LinearLayout) findViewById(R.id.payment_layout));
-
     }
 
 }

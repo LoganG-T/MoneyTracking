@@ -29,7 +29,7 @@ public class SpinnerPayWeek extends SpinnerTotals {
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 
-        current_date.setWeek(position);
+        current_date.setWeek(position + 1);
 
         //Update payment displayed
     }

@@ -16,6 +16,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class AddPayment {
@@ -29,6 +30,9 @@ public class AddPayment {
         spinnerDay = new SpinnerDay(activity, activity.getApplicationContext(), current_date);
         spinnerDay.spinner_setup(R.id.spinDay);
         activity.findViewById(R.id.spinDay).setVisibility(View.INVISIBLE);
+        index_list = new ArrayList<IndexInfo>();
+        day_counts = new int[7];
+        delete_counts = new int[7];
     }
 
     private Activity activity;
@@ -38,7 +42,9 @@ public class AddPayment {
     private EditText notesText;
     private SpinnerDay spinnerDay;
     private boolean plus = true;
-    private int payment_counter = 0;
+    private ArrayList<IndexInfo> index_list;
+    private int[] day_counts;
+    private int[] delete_counts;
 
     private DateObject current_date;
 
@@ -56,16 +62,21 @@ public class AddPayment {
         if(json_week == null){
             return;
         }
+        index_list = new ArrayList<IndexInfo>();
+        day_counts = new int[7];
+        delete_counts = new int[7];
         System.out.println("Load another week " + json_week.toString());
         for(int i = 0; i < json_week.length(); i++){
             JSONArray day_spending = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("spending");
             JSONArray day_notes = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("notes");
             for(int d_i = 0; d_i < day_spending.length(); d_i++){
-                LinearLayout cur_layout = new_layout(i, l_layout);
+                LinearLayout cur_layout = new_layout(i, json_week.getJSONObject(i).getString("weekday"), l_layout);
                 TextView pay_view = cur_layout.findViewWithTag("Text");
                 pay_view.setText(day_spending.getString(d_i));
                 TextView note_view = cur_layout.findViewWithTag("Notes");
                 note_view.setText(day_notes.getString(d_i));
+                TextView day_view = cur_layout.findViewWithTag("Day");
+                day_view.setText(json_week.getJSONObject(i).getString("weekday"));
             }
 
         }
@@ -112,11 +123,13 @@ public class AddPayment {
                     notes = "None";
                 }
                 //add_pay_layout(payment_string, layout.getChildCount(), layout);
-                LinearLayout new_layout = new_layout(layout.getChildCount(), layout);
+                LinearLayout new_layout = new_layout(layout.getChildCount() - 1, current_date.getDay(), layout);
                 TextView pay_view = new_layout.findViewWithTag("Text");
                 pay_view.setText(payment_string);
                 TextView note_view = new_layout.findViewWithTag("Notes");
                 note_view.setText(notes);
+                TextView day_view = new_layout.findViewWithTag("Day");
+                day_view.setText(current_date.getDay());
                 //add_notes_layout(notes, layout.getChildCount(), layout);
                 String add_string = payment_toString(payment_string, notes);
                 jsonHandler.Json_add_spending(add_string);
@@ -128,7 +141,8 @@ public class AddPayment {
                 //edit("labels", payment_string);
                 text.setVisibility(View.GONE);
                 notesText.setVisibility(View.GONE);
-                payment_counter++;
+
+                //payment_counter++;
                 ImageButton ib = (ImageButton)activity.findViewById(R.id.imageButton);
                 ib.setImageResource(R.drawable.add_image);
                 activity.findViewById(R.id.spinDay).setVisibility(View.INVISIBLE);
@@ -137,11 +151,13 @@ public class AddPayment {
     }
 
     private String payment_toString(String payment, String note){
-        return "{ \"year\":" + current_date.getYear() + ", \"week\": " + current_date.getWeek() +
-                ", \"weekday\":" + current_date.getDay() + ", \"amount\":[" + payment + "],\"notes\":[" + note + "] }";
+        current_date.update_month();
+        return "{ \"year\":" + current_date.getYear() + ", \"week\": " + current_date.getWeek() +",\"month\": \"" + current_date.getMonth() +
+                "\", \"weekday\":" + current_date.getDay() + ", \"amount\":[" + payment + "],\"notes\":[" + note + "] }";
     }
 
-    private LinearLayout new_layout(int id, LinearLayout layout){
+    private LinearLayout new_layout(int id, String wday, LinearLayout layout){
+        final String weekday = wday;
         final LinearLayout newLayout = new LinearLayout(activity);
         newLayout.setOrientation(LinearLayout.HORIZONTAL);
 
@@ -157,16 +173,26 @@ public class AddPayment {
 
         Space second_space = new Space(activity);
         second_space.setLayoutParams(param);
+        Space space_zero = new Space(activity);
+        space_zero.setLayoutParams(param);
 
         TextView notesTextView = new TextView(activity);
+        TextView dayTextView = new TextView(activity);
         Button b = new Button(activity);
         b.setText("Delete");
         //b.setId(id);
         //textView.setId(id);
         newLayout.setId(id);
+
+        IndexInfo ii = new IndexInfo(id, day_counts[current_date.getDayInt(wday) - 1], wday);
+        day_counts[current_date.getDayInt(wday) - 1] += 1;
+        index_list.add(ii);
+        System.out.println("ADDPAYMENT L:INE 183 " + id + " " + (current_date.getDayInt(wday) - 1) + " " + day_counts[current_date.getDayInt(wday) - 1]);
+
         b.setTag("Button");
         textView.setTag("Text");
         notesTextView.setTag("Notes");
+        dayTextView.setTag("Day");
 
         b.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
@@ -176,6 +202,8 @@ public class AddPayment {
             };
         });
 
+        newLayout.addView(dayTextView);
+        newLayout.addView(space_zero);
         newLayout.addView(textView);
         newLayout.addView(space);
         newLayout.addView(notesTextView);
@@ -198,15 +226,24 @@ public class AddPayment {
 
         LinearLayout layout = (LinearLayout) activity.findViewById(id);
 
-        TextView tv = (TextView)layout.getChildAt(0);
-        float f = Float.parseFloat(tv.getText().toString());
+        //TextView tv = (TextView)layout.getChildAt(1);
+        //float f = Float.parseFloat(tv.getText().toString());
         //add_to_total(-f);
 
         layout.removeAllViews();
+        int c_id = 0;
+        for(int i = 0; i < index_list.size(); i++){
+            if(index_list.get(i).Get_Index() == id){
+                c_id = i;
+                break;
+            }
+        }
 
         //{ "year":2020, "week":1, "weekday":"Monday", "index":1}
-        String remove_string = "{ \"year\":" + current_date.getYear() +", \"week\":" + current_date.getWeek() +", \"weekday\":\"" + current_date.getDay()
-                + "\", \"index\":" + id + " }";
+        String remove_string = "{ \"year\":" + current_date.getYear() +", \"week\":" + current_date.getWeek() +", \"weekday\":\"" + index_list.get(c_id).Get_Day()
+                + "\", \"index\":" + (index_list.get(c_id).Get_ArrayPos() - delete_counts[current_date.getDayInt(index_list.get(c_id).Get_Day()) - 1]) + " }";
+        delete_counts[current_date.getDayInt(index_list.get(c_id).Get_Day()) - 1] += 1;
+        index_list.remove(c_id);
         System.out.println(remove_string);
         try {
             boolean deleted = jsonHandler.delete_spending(remove_string);
@@ -217,6 +254,31 @@ public class AddPayment {
             }
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+
+    }
+
+    private class IndexInfo{
+        int index_pos;
+        int array_pos;
+        String day;
+
+        public IndexInfo(int i, int a, String s){
+            index_pos = i;
+            array_pos = a;
+            day = s;
+        }
+
+        public int Get_Index(){
+            return index_pos;
+        }
+
+        public int Get_ArrayPos(){
+            return array_pos;
+        }
+
+        public String Get_Day(){
+            return  day;
         }
 
     }

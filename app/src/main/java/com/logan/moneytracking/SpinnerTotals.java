@@ -32,7 +32,6 @@ public class SpinnerTotals extends AppCompatActivity implements AdapterView.OnIt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.out.println("DROP WORK");
-
     }
 
     public void spinner_setup(int given_year, int given_spinner){
@@ -73,6 +72,7 @@ public class SpinnerTotals extends AppCompatActivity implements AdapterView.OnIt
         spinner.setOnItemSelectedListener(this);
         //Need to minus 1 because it is zero-index'd
         current_date.setWeek(this_week - 1);
+        System.out.println("CURRENT WEEK SET TO " + this_week);
         spinner.setSelection(this_week - 1);
     }
 

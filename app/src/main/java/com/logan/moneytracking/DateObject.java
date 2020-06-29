@@ -126,6 +126,26 @@ public class DateObject {
         }
     }
 
+    public void update_week(int amount){
+        week += amount;
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.WEEK_OF_YEAR, week);
+        month = getMonthString(calendar.get(Calendar.MONTH));
+    }
+
+    public void update_month(){
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR,year);
+        calendar.set(Calendar.WEEK_OF_YEAR, week);
+        int d = getDayInt() + 1;
+        if(d > 7){
+            d = 0;
+        }
+        calendar.set(Calendar.DAY_OF_WEEK, d);
+        month = getMonthString(calendar.get(Calendar.MONTH));
+    }
+
     String day;
     String month;
     int week;
@@ -237,6 +257,47 @@ public class DateObject {
                 break;
             default:
                 this.day = "Sunday";
+        }
+    }
+
+    public int getDayInt() {
+        switch(day){
+            case("Monday"):
+                return 1;
+            case("Tuesday"):
+                return 2;
+            case("Wednesday"):
+                return 3;
+            case("Thursday"):
+                return 4;
+            case("Friday"):
+                return 5;
+            case("Saturday"):
+                return 6;
+            case("Sunday"):
+                return 7;
+            default:
+                return 7;
+        }
+    }
+    public int getDayInt(String s) {
+        switch(s){
+            case("Monday"):
+                return 1;
+            case("Tuesday"):
+                return 2;
+            case("Wednesday"):
+                return 3;
+            case("Thursday"):
+                return 4;
+            case("Friday"):
+                return 5;
+            case("Saturday"):
+                return 6;
+            case("Sunday"):
+                return 7;
+            default:
+                return 7;
         }
     }
 

@@ -2,25 +2,18 @@ package com.logan.moneytracking;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
+
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.TextView;
 
 import com.logan.R;
-import com.logan.budget.BudgetActivity;
-import com.logan.budget.BudgetActivityMain;
+
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
@@ -82,6 +75,10 @@ public class MainActivity extends AppCompatActivity {
 
             spinnerWeek = new SpinnerPayWeek(this, getApplicationContext(), dateObject);
             spinnerWeek.spinner_setup(dateObject.getYear(), R.id.spinner1);
+
+
+            SpinnerYear spinnerYear = new SpinnerYear(this, getApplicationContext(), dateObject);
+            spinnerYear.spinner_setup(dateObject.getYear(), R.id.spin_year);
 
             addPayment.load_plus_button();
 

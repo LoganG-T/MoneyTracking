@@ -70,7 +70,7 @@ public class JsonHandler {
             //Unhandled thrown exception from get year above
 
             if(selected_obj == null){
-                return false;
+                selected_obj = add_new_year(json_obj.getInt("year"));
             }
 
             //Accessing the week / week-index position
@@ -170,8 +170,6 @@ public class JsonHandler {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
-
         return return_json;
     }
 
@@ -328,6 +326,13 @@ public class JsonHandler {
         return new_week;
     }
 
+    public JSONObject add_new_year(int year) throws JSONException {
+        JSONObject json_year = new JSONObject("{\"week\":[],\"year\":" + year + ",\"days\":[]}");
+        current_json.getJSONArray("date").put(json_year);
+
+        return json_year;
+    }
+
     public float week_spending(int year, int week){
         try {
             float total = 0f;
@@ -350,20 +355,45 @@ public class JsonHandler {
     }
 
     //{ "year":2020, "week":1, "weekday":"Monday", "index":1 }
-    public boolean delete_spending(String given_string) throws JSONException {
+    public float delete_spending(String given_string) throws JSONException {
 
+        float ret_f = 0f;
         JSONObject given_json = new JSONObject(given_string);
 
         JSONObject day_obj = get_chosen_day(given_json.getString("weekday"), given_json.getInt("week"), given_json.getInt("year"));
 
         int index = given_json.getInt("index");
-        System.out.println("JSONHANDLER LINE 360 - " + index + " " + day_obj.getJSONArray("spending").getString(0) + " " + day_obj.getJSONArray("spending").getString(index));
+
+        ret_f = (float)day_obj.getJSONArray("spending").getDouble(index);
+
         day_obj.getJSONArray("spending").remove(index);
         day_obj.getJSONArray("notes").remove(index);
+        if(day_obj.getJSONArray("spending").length() == 0){
+            remove_chosen_day(given_json.getString("weekday"), given_json.getInt("week"), given_json.getInt("year"));
+        }
 
-        System.out.println("XX " + get_year(2020));
 
-        return true;
+        return ret_f;
+    }
+
+    private boolean remove_chosen_day(String c_day, int c_week, int c_year){
+        JSONObject return_json = null;
+        try {
+            JSONArray days = get_week(c_year, c_week);
+            if(days == null){
+                return false;
+            }
+            for(int i = 0; i < days.length(); i++){
+                if(days.getJSONObject(i).getString("weekday").equals(c_day)){
+                    days.remove(i);
+                    return true;
+                }
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }

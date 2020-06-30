@@ -30,6 +30,7 @@ public class AddPayment {
         spinnerDay = new SpinnerDay(activity, activity.getApplicationContext(), current_date);
         spinnerDay.spinner_setup(R.id.spinDay);
         activity.findViewById(R.id.spinDay).setVisibility(View.INVISIBLE);
+        totalText = (TextView)activity.findViewById(R.id.txt_weekTotal);
         index_list = new ArrayList<IndexInfo>();
         day_counts = new int[7];
         delete_counts = new int[7];
@@ -38,6 +39,8 @@ public class AddPayment {
     private Activity activity;
     final JsonHandler jsonHandler;
 
+    private String cur_sym = "£";
+    private TextView totalText;
     private EditText text;
     private EditText notesText;
     private SpinnerDay spinnerDay;
@@ -45,6 +48,7 @@ public class AddPayment {
     private ArrayList<IndexInfo> index_list;
     private int[] day_counts;
     private int[] delete_counts;
+    private float temp_total = 0;
 
     private DateObject current_date;
 
@@ -66,6 +70,10 @@ public class AddPayment {
         day_counts = new int[7];
         delete_counts = new int[7];
         System.out.println("Load another week " + json_week.toString());
+        NotesFunctions nf = new NotesFunctions();
+        nf.Add_WeekNotes(json_week);
+        temp_total = nf.Get_TotalSpending();
+        totalText.setText(cur_sym + String.valueOf(temp_total));
         for(int i = 0; i < json_week.length(); i++){
             JSONArray day_spending = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("spending");
             JSONArray day_notes = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("notes");
@@ -78,7 +86,6 @@ public class AddPayment {
                 TextView day_view = cur_layout.findViewWithTag("Day");
                 day_view.setText(json_week.getJSONObject(i).getString("weekday"));
             }
-
         }
     }
 
@@ -123,7 +130,8 @@ public class AddPayment {
                     notes = "None";
                 }
                 //add_pay_layout(payment_string, layout.getChildCount(), layout);
-                LinearLayout new_layout = new_layout(layout.getChildCount() - 1, current_date.getDay(), layout);
+                LinearLayout new_layout = new_layout(layout.getChildCount() + 1, current_date.getDay(), layout);
+                System.out.println("LAYOUT ID " + new_layout.getId());
                 TextView pay_view = new_layout.findViewWithTag("Text");
                 pay_view.setText(payment_string);
                 TextView note_view = new_layout.findViewWithTag("Notes");
@@ -136,7 +144,9 @@ public class AddPayment {
                 SaveLoad sl = new SaveLoad();
                 sl.Save_Data(activity.getApplicationContext(), jsonHandler);
 
-                float f = Float.parseFloat(payment_string);
+                temp_total += Float.parseFloat(payment_string);
+                totalText.setText(cur_sym + String.valueOf(temp_total));
+                //float f = Float.parseFloat(payment_string);
                 //add_to_total(f);
                 //edit("labels", payment_string);
                 text.setVisibility(View.GONE);
@@ -187,7 +197,6 @@ public class AddPayment {
         IndexInfo ii = new IndexInfo(id, day_counts[current_date.getDayInt(wday) - 1], wday);
         day_counts[current_date.getDayInt(wday) - 1] += 1;
         index_list.add(ii);
-        System.out.println("ADDPAYMENT L:INE 183 " + id + " " + (current_date.getDayInt(wday) - 1) + " " + day_counts[current_date.getDayInt(wday) - 1]);
 
         b.setTag("Button");
         textView.setTag("Text");
@@ -198,6 +207,7 @@ public class AddPayment {
             public void onClick(View v){
                 //String jsonStringNum = Integer.toString();
                 int i = newLayout.getId();
+                System.out.println("AFTER 2 LAYOUT ID " + i);
                 removePayment(v, i);
             };
         });
@@ -230,6 +240,9 @@ public class AddPayment {
         //float f = Float.parseFloat(tv.getText().toString());
         //add_to_total(-f);
 
+        if(layout == null){
+            return;
+        }
         layout.removeAllViews();
         int c_id = 0;
         for(int i = 0; i < index_list.size(); i++){
@@ -246,12 +259,11 @@ public class AddPayment {
         index_list.remove(c_id);
         System.out.println(remove_string);
         try {
-            boolean deleted = jsonHandler.delete_spending(remove_string);
-            if(deleted){
-                SaveLoad sl = new SaveLoad();
-                sl.Save_Data(activity.getApplicationContext(), jsonHandler);
-                System.out.println(jsonHandler.get_year(2020));
-            }
+            float deleted_amount = jsonHandler.delete_spending(remove_string);
+            SaveLoad sl = new SaveLoad();
+            sl.Save_Data(activity.getApplicationContext(), jsonHandler);
+            temp_total -= deleted_amount;
+            totalText.setText(cur_sym + String.valueOf(temp_total));
         } catch (JSONException e) {
             e.printStackTrace();
         }

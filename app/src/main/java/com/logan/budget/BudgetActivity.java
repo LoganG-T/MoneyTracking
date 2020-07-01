@@ -128,7 +128,7 @@ public class BudgetActivity extends AppCompatActivity {
 
 
         budgetManager.set_jsonHandler(jsonHandler);
-        textAmount.setText(Float.toString(budgetManager.get_week_budget(start_date.getYear(), start_date.getWeek())));
+        textAmount.setText(Float.toString(budgetManager.get_week_full_budget(start_date.getYear(), start_date.getWeek())));
         textLeft.setText(Integer.toString(budgetManager.get_weeks_left()));
         budgetManager.save_budget(this);
         System.out.println("Saved");

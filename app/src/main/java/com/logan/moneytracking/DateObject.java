@@ -113,25 +113,63 @@ public class DateObject {
                 return (given_date.getWeek() - week) + 1;
             }
         }else{
-            return 1;
-        }
-    }
-
-    public void addWeek(int amount){
-        week++;
-
-        if(week >= 53){
-            week = 0;
-            year++;
+            int year_diff = given_date.getYear() - year;
+            int weeks = 0;
+            for (int i = 0; i <= year_diff; i++) {
+                if (i == 0) {
+                    if (get_weeks_year(year)) {
+                        weeks += 53 - week;
+                    } else {
+                        weeks += 52 - week;
+                    }
+                } else if (i == year_diff) {
+                    if (get_weeks_year(year)) {
+                        weeks += given_date.getWeek();
+                        return weeks;
+                    } else {
+                        weeks += given_date.getWeek();
+                        return weeks;
+                    }
+                } else {
+                    if (get_weeks_year(year)) {
+                        weeks += 53;
+                    } else {
+                        weeks += 52;
+                    }
+                }
+            }
+            return weeks;
         }
     }
 
     public void update_week(int amount){
         week += amount;
+
+        int max_weeks = 52;
+        if(get_weeks_year(year)){
+            max_weeks = 53;
+        }
+        if(week > max_weeks){
+            week = 1;
+            year++;
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.YEAR,year);
         calendar.set(Calendar.WEEK_OF_YEAR, week);
+
         month = getMonthString(calendar.get(Calendar.MONTH));
+    }
+    boolean get_weeks_year(int year){
+        int[] e_years  = new int[]{4,9, 15, 20, 26, 32, 37, 43, 48, 54, 60, 65, 71, 76, 82, 88, 93, 99, 105, 111, 116, 122, 128, 133, 139, 144, 150, 156, 161, 167, 172, 178, 184, 189, 195, 201, 207, 212, 218, 224, 229, 235, 240, 246, 252, 257, 263, 268, 274, 280, 285, 291, 296, 303, 308, 314, 320, 325, 331, 336, 342, 348, 353, 359, 364, 370, 376, 381, 387, 392, 398};
+        for(int i = 0; i < e_years.length; i++){
+            if(year == 2000 + e_years[i]){
+                return true;
+            }
+            if(year < 2000 + e_years[i]){
+                return false;
+            }
+        }
+        return false;
     }
 
     public void update_month(){

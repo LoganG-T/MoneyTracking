@@ -22,7 +22,6 @@ public class BudgetManager {
 
     JsonHandler jsonHandler;
     Calendar c;
-    String all_budget_strings;
     JSONObject all_budgets;
 
     /*public BudgetManager(float amount, DateObject start_date, DateObject end_date){
@@ -88,6 +87,11 @@ public class BudgetManager {
         return budget.get_weekly_budget();
     }
 
+    public float get_week_full_budget(int year, int week){
+        //Returns the full budget for each week from the start date to the end date
+        return budget.get_weekly_budget();
+    }
+
     public float get_day_budget(DateObject get_date, float weeks_spending){
         //Returns the budget for the date given on that one day
         float days_left = 7f;
@@ -122,7 +126,7 @@ public class BudgetManager {
         DateObject c_date = new DateObject(budget.start_date);
         for(int i = 0; i < week_diff; i++){
             spent += jsonHandler.week_spending(c_date.getYear(), c_date.getWeek());
-            c_date.addWeek(1);
+            c_date.update_week(1);
         }
 
         budget.update_spending(spent);

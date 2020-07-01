@@ -139,7 +139,7 @@ public class Budget {
     }
 
     private int calculate_term_time(DateObject start, DateObject end){
-        return 1;
+        return start.weekDifference(end);
     }
 
 }

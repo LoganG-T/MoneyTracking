@@ -5,6 +5,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class NotesFunctions {
 
@@ -128,13 +129,13 @@ public class NotesFunctions {
     }
 
 
-    public String[] Get_NotesNames(){
+    public ArrayList<String> Get_NotesNames(){
         String[] s = new String[spending_notes.size() + 1];
         s[0] = inc_all;
         for(int i = 0; i < spending_notes.size(); i++){
             s[i + 1] = spending_notes.get(i).getNote();
         }
-        return s;
+        return new ArrayList<String>(Arrays.asList(s));
     }
 
 

@@ -10,6 +10,8 @@ import android.widget.TextView;
 
 import com.logan.R;
 
+import java.util.ArrayList;
+
 
 public class NotesSpinner implements AdapterView.OnItemSelectedListener{
 
@@ -20,7 +22,9 @@ public class NotesSpinner implements AdapterView.OnItemSelectedListener{
 
     public Activity activity;
     public Context main_context;
-    String[] all_notes;
+    ArrayAdapter<String> adapter = null;
+    String[] all_note;
+    ArrayList<String> all_notes;
     NotesFunctions notesFunctions;
     String cur_symb = "£";
     int latest_position;
@@ -29,7 +33,7 @@ public class NotesSpinner implements AdapterView.OnItemSelectedListener{
     public void spinner_setup(int given_spinner){
 
         Spinner spinner = (Spinner) activity.findViewById(given_spinner);
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(main_context,
+        adapter = new ArrayAdapter<String>(main_context,
                 android.R.layout.simple_spinner_item, all_notes);
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -39,22 +43,31 @@ public class NotesSpinner implements AdapterView.OnItemSelectedListener{
         spinner.setSelection(0);
     }
 
-    public void Set_AllNotes(String[] s){
+    public void update_notes(){
+        if(adapter != null) {
+            adapter.clear();
+            adapter.addAll(all_notes);
+        }
+    }
+
+    public void Set_AllNotes(ArrayList<String> s){
         all_notes = s;
+        update_notes();
     }
 
     public void set_NotesFunc(NotesFunctions nf){
         notesFunctions = nf;
     }
 
+
     public void update_output(){
         TextView textView = (TextView)activity.findViewById(R.id.note_display);
-        textView.setText(cur_symb + String.valueOf(notesFunctions.Get_NotesTotal(all_notes[latest_position])));
+        textView.setText(cur_symb + String.valueOf(notesFunctions.Get_NotesTotal(all_notes.get(latest_position))));
         TextView textView2 = (TextView)activity.findViewById(R.id.note_total);
         textView2.setText("out of " + cur_symb + String.valueOf(notesFunctions.Get_TotalSpending()));
 
         TextView textPercent = (TextView)activity.findViewById(R.id.note_percent);
-        float perc = notesFunctions.Get_NotesTotal(all_notes[latest_position]) / notesFunctions.Get_TotalSpending();
+        float perc = notesFunctions.Get_NotesTotal(all_notes.get(latest_position)) / notesFunctions.Get_TotalSpending();
         perc *= 10000;
         perc = (int)perc;
         perc = (perc / 100f);

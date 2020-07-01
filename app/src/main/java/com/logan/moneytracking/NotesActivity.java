@@ -41,16 +41,16 @@ public class NotesActivity extends AppCompatActivity {
 
             notesSpinner.set_NotesFunc(year_notes);
             notesSpinner.spinner_setup(R.id.notes_spinner);
-            System.out.println(year_notes.Get_NotesTotal("electric"));
-            System.out.println("TESCO " + year_notes.Get_NotesTotal("Tesco"));
 
             Calendar c = Calendar.getInstance();
-            current_date = new DateObject("Monday", c.get(Calendar.WEEK_OF_YEAR), c.get(Calendar.YEAR));
+            current_date = new DateObject(c.get(Calendar.DAY_OF_WEEK), c.get(Calendar.WEEK_OF_YEAR), c.get(Calendar.YEAR));
 
             SpinnerMonth spinnerMonth = new SpinnerMonth(this, getApplicationContext(), current_date);
             spinnerMonth.spinner_setup(R.id.n_monthSpin);
             SpinnerYear spinnerYear = new SpinnerYear(this, getApplicationContext(), current_date);
             spinnerYear.spinner_setup(current_date.getYear(), R.id.n_yearSpin);
+
+            update_pageData();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -73,24 +73,30 @@ public class NotesActivity extends AppCompatActivity {
         }
     }
 
-    public void confirm_dates(View view) {
+    public void update_pageData(){
         NotesFunctions nf = new NotesFunctions();
         try {
             JSONObject year_obj = js.get_year(current_date.getYear());
             if(year_obj == null){
-                return;
-            }
-            int i_count = year_obj.getJSONArray("week").length();
-            JSONArray year_arr = year_obj.getJSONArray("days");
-            for (int i = 0; i < i_count; i++) {
-                nf.Add_MonthNotes(year_arr.getJSONArray(i), current_date.getMonth());
+                //return;
+            }else {
+                int i_count = year_obj.getJSONArray("week").length();
+                JSONArray year_arr = year_obj.getJSONArray("days");
+                for (int i = 0; i < i_count; i++) {
+                    nf.Add_MonthNotes(year_arr.getJSONArray(i), current_date.getMonth());
+                }
             }
             notesSpinner.set_NotesFunc(nf);
+            notesSpinner.Set_AllNotes(nf.Get_NotesNames());
             notesSpinner.update_output();
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void confirm_dates(View view) {
+        update_pageData();
     }
 
 

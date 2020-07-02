@@ -205,16 +205,28 @@ public class BudgetManager {
         return false;
     }
 
-    public boolean update_budget(String up_name, String up_value){
+    public boolean update_budget(String json_name, String up_value){
 
         try {
-            current_budget.put(up_name, up_value);
+            current_budget.put(json_name, up_value);
             budget = new Budget(current_budget);
             return true;
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return false;
+    }
+    public boolean update_budget(String json_name, DateObject up_value){
 
+        try {
+            System.out.println("UPDATE 1 " + up_value.toString());
+            System.out.println("UPDATE 2 " + new JSONObject(up_value.toString()).toString());
+            current_budget.put(json_name, new JSONObject(up_value.toString()));
+            budget = new Budget(current_budget);
+            return true;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return false;
     }
 

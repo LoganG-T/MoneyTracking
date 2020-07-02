@@ -28,10 +28,10 @@
         android:text="View budgets"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.55"
+        app:layout_constraintHorizontal_bias="0.162"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.055" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_new"
+        app:layout_constraintVertical_bias="0.038" />
 
     <Button
         android:id="@+id/btn_edit"
@@ -41,35 +41,9 @@
         android:text="Edit budgets"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.972"
+        app:layout_constraintHorizontal_bias="0.16"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.055" />
-
-    <Button
-        android:id="@+id/day_total"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="view_totals"
-        android:text="Totals"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.721"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.345" />
-
-    <Button
-        android:id="@+id/note_totals"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="notes_totals"
-        android:text="Total by note"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.166"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.345" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_view"
+        app:layout_constraintVertical_bias="0.036" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

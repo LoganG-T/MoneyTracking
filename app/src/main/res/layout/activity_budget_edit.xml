@@ -46,19 +46,9 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.166" />
 
-    <Button
-        android:id="@+id/btn_editConfirm"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Confirm edit"
-        android:onClick="Confirm_Edit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.715" />
 
     <LinearLayout
+        android:id="@+id/layout_Data"
         android:layout_width="wrap_content"
         android:layout_height="270dp"
         android:orientation="vertical"
@@ -66,7 +56,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.475">
+        app:layout_constraintVertical_bias="0.475"
+        android:gravity="center">
 
         <LinearLayout
             android:layout_width="300dp"
@@ -94,29 +85,30 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/text_start"
+                android:id="@+id/textView11"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Budget start" />
+                android:layout_weight="1"
+                android:text="Start date" />
 
-            <Spinner
-                android:id="@+id/start_year"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:spinnerMode="dropdown" />
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="wrap_content" />
 
-            <Spinner
-                android:id="@+id/start_month"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
-
-            <Spinner
-                android:id="@+id/start_day"
+            <TextView
+                android:id="@+id/txt_startDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
+                android:layout_weight="1"
+                android:text="Monday 31st January" />
 
+            <Button
+                android:id="@+id/btn_start_display"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Edit"
+                android:onClick="Edit_StartDate"/>
         </LinearLayout>
 
         <LinearLayout
@@ -125,29 +117,31 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/text_end"
+                android:id="@+id/textView13"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Budget end" />
+                android:layout_weight="1"
+                android:text="End date" />
 
-            <Spinner
-                android:id="@+id/end_year"
+            <Space
+                android:layout_width="10dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1" />
+
+            <TextView
+                android:id="@+id/txt_endDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
+                android:layout_weight="1"
+                android:text="Monday 31st January" />
 
-            <Spinner
-                android:id="@+id/end_month"
+            <Button
+                android:id="@+id/btn_end_display"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
-
-            <Spinner
-                android:id="@+id/end_day"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:spinnerMode="dropdown" />
-
+                android:layout_weight="1"
+                android:text="Edit"
+                android:onClick="Edit_EndDate"/>
         </LinearLayout>
 
         <LinearLayout
@@ -169,6 +163,44 @@
                 android:inputType="number"
                 android:text="0" />
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_editConfirm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Confirm edit"
+            android:onClick="Confirm_Edit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.715" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_calenderBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="261dp"
+            android:layout_height="232dp" />
+
+        <Button
+            android:id="@+id/button6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:onClick="Close_DateCalendar"
+            android:text="Confirm" />
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

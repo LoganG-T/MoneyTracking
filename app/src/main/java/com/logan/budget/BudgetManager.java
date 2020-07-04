@@ -74,6 +74,14 @@ public class BudgetManager {
         return false;
     }
 
+    public String get_startDiff(DateObject d){
+        String s = "";
+
+        s += budget.start_date.weekDifference(d) - 1;
+
+        return s;
+    }
+
     public void set_new_budget(String name, float amount, DateObject start_date, DateObject end_date){
         //Sets a new budget for the dates between start_date and end_date
         budget = new Budget(name, amount, start_date, end_date);

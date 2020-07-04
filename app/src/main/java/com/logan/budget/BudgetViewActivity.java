@@ -49,6 +49,7 @@ public class BudgetViewActivity extends AppCompatActivity {
                 BudgetSpinner budgetSpinner = new BudgetSpinner(BudgetViewActivity.this, this, budgetManager);
                 budgetSpinner.spinner_setup(R.id.sp_budgetNames);
             }
+            set_currentDate();
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -62,14 +63,41 @@ public class BudgetViewActivity extends AppCompatActivity {
         }
     }
 
+    private void set_currentDate(){
+        String s = "";
+        TextView textWeek = (TextView) findViewById(R.id.txt_selectedWeek);
+        c.set(Calendar.DAY_OF_WEEK,2);
+        DateObject dateObject = new DateObject(c);
+        s += c.get(Calendar.DAY_OF_MONTH) + " " + dateObject.getMonth() + "-";
+        Calendar c2 = (Calendar)c.clone();
+        if(s.length() > 8){
+            s+="\n";
+        }
+        c2.set(Calendar.DAY_OF_WEEK, 1);
+        c2.add(Calendar.DAY_OF_WEEK, 7);
+        s += c2.get(Calendar.DAY_OF_MONTH);
+        for(int i = 0; i < 7; i++){
+            c2.set(Calendar.DAY_OF_WEEK, i+1);
+            System.out.println(c2.get(Calendar.DAY_OF_MONTH) + " i: " + (i+1));
+        }
+        DateObject dateObject2 = new DateObject(c2);
+        s += " " + dateObject2.getMonth();
+        textWeek.setText(s + " " + dateObject.getYear());
+
+    }
+
     public void select_budget(View view){
+        set_currentDate();
+
         if(budgetManager.budget_ended(new DateObject(c))){
             System.out.println("BUDGET OVER");
             TextView textView = (TextView) findViewById(R.id.txt_remoney);
             textView.setText("Budget has already ended, view by week?");
         }else if(budgetManager.before_started(new DateObject(c))){
             TextView textView = (TextView) findViewById(R.id.txt_remoney);
-            textView.setText("Budget has not started as this date.");
+            DateObject d = new DateObject(c);
+            d.setDay("Monday");
+            textView.setText("Budget starts in " + budgetManager.get_startDiff(d) + " weeks.");
         }else {
             DateObject d = new DateObject(c);
             DateObject current_date = new DateObject(Calendar.getInstance());

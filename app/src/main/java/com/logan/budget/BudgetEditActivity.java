@@ -152,10 +152,8 @@ public class BudgetEditActivity extends AppCompatActivity {
         TextView t_value= (TextView)findViewById(et_budAmount);
 
         DateObject start = new DateObject(c_s);
-        System.out.println("START " + start.toString());
 
         DateObject end = new DateObject(c_e);
-        System.out.println("END " + end.toString());
 
         boolean x = budgetManager.update_budget("name", t_name.getText().toString());
         x = x && budgetManager.update_budget("total_budget", t_value.getText().toString());

@@ -191,8 +191,8 @@
 
         <CalendarView
             android:id="@+id/calendarView"
-            android:layout_width="261dp"
-            android:layout_height="232dp" />
+            android:layout_width="279dp"
+            android:layout_height="305dp" />
 
         <Button
             android:id="@+id/button6"

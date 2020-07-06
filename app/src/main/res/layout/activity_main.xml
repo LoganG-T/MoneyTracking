@@ -28,7 +28,7 @@
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="@+id/imageButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.13"
+        app:layout_constraintHorizontal_bias="0.25"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spin_year"
         app:layout_constraintVertical_bias="0.971"
@@ -49,7 +49,7 @@
 
             <LinearLayout
                 android:id="@+id/textLayout"
-                android:layout_width="227dp"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"></LinearLayout>
         </LinearLayout>
@@ -69,9 +69,17 @@
 
             <LinearLayout
                 android:id="@+id/notesTextLayout"
-                android:layout_width="227dp"
+                android:layout_width="119dp"
                 android:layout_height="match_parent"
-                android:orientation="vertical"></LinearLayout>
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <Spinner
+                android:id="@+id/spin_allNotes"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+
         </LinearLayout>
 
         <LinearLayout

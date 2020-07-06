@@ -227,8 +227,30 @@ public class AddPayment {
         LinearLayout layout = (LinearLayout) activity.findViewById(R.id.notesTextLayout);
 
         notesText = new EditText(activity);
+        display_old_notes(notesText);
         notesText.setInputType(InputType.TYPE_CLASS_TEXT);
         layout.addView(notesText);
+    }
+
+    private void display_old_notes(TextView textView){
+        PaymentNotesSpinner notesSpinner = new PaymentNotesSpinner(activity, activity.getApplicationContext());
+
+        notesSpinner.setTextView(textView);
+
+
+        try {
+            NotesFunctions nf = new NotesFunctions();
+            nf.Add_YearNotes(jsonHandler.get_year(2020));
+            notesSpinner.set_NotesFunc(nf);
+            ArrayList<String> s = nf.Get_NotesNames();
+            s.remove("All");
+            notesSpinner.Set_AllNotes(s);
+
+            notesSpinner.spinner_setup(R.id.spin_allNotes);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

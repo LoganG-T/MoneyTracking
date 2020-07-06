@@ -15,6 +15,11 @@ import java.util.ArrayList;
 
 public class NotesSpinner implements AdapterView.OnItemSelectedListener{
 
+    public NotesSpinner(){
+        activity = null;
+        main_context = null;
+    }
+
     public NotesSpinner(Activity a, Context c){
         activity = a;
         main_context = c;
@@ -23,7 +28,6 @@ public class NotesSpinner implements AdapterView.OnItemSelectedListener{
     public Activity activity;
     public Context main_context;
     ArrayAdapter<String> adapter = null;
-    String[] all_note;
     ArrayList<String> all_notes;
     NotesFunctions notesFunctions;
     String cur_symb = "£";
@@ -83,7 +87,6 @@ public class NotesSpinner implements AdapterView.OnItemSelectedListener{
         //load_page.set_dates();
         latest_position = position;
         update_output();
-
     }
 
 

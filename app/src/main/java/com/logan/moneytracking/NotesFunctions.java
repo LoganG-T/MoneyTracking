@@ -16,6 +16,11 @@ public class NotesFunctions {
         total_spending = 0f;
     }
 
+    public NotesFunctions(JsonHandler js){
+        spending_notes = new ArrayList<SpendingCount>();
+        total_spending = 0f;
+    }
+
     ArrayList<SpendingCount> spending_notes;
     float total_spending;
 
@@ -125,6 +130,13 @@ public class NotesFunctions {
             if(given_json.getJSONObject(i).getString("month").equals(given_month)) {
                 Add_DayNotes(given_json.getJSONObject(i).getJSONObject("day_spending"));
             }
+        }
+    }
+
+    public void Add_YearNotes(JSONObject given_json) throws JSONException {
+        JSONArray year_array = given_json.getJSONArray("days");
+        for(int i = 0; i < year_array.length(); i++){
+            Add_WeekNotes(year_array.getJSONArray(i));
         }
     }
 

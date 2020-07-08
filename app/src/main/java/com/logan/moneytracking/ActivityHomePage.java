@@ -76,4 +76,10 @@ public class ActivityHomePage extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void View_Colours(View view){
+        Intent intent = new Intent(this, ActivityColour.class);
+
+        startActivity(intent);
+    }
+
 }

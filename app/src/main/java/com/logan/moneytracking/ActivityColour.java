@@ -2,6 +2,7 @@ package com.logan.moneytracking;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -9,6 +10,10 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.logan.R;
+
+import org.json.JSONException;
+
+import java.util.ArrayList;
 
 public class ActivityColour extends AppCompatActivity {
 
@@ -18,6 +23,8 @@ public class ActivityColour extends AppCompatActivity {
     int b = 0;
     boolean text = false;
 
+    ColourNotesSpinner notesSpinner;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,6 +32,25 @@ public class ActivityColour extends AppCompatActivity {
 
         show_colour = findViewById(R.id.imageView);
         Set_Colour_Bars(R.id.seek_red,R.id.seek_green,R.id.seek_blue);
+
+        notesSpinner = new ColourNotesSpinner(this, getApplicationContext());
+
+
+
+        try {
+            JsonHandler jsonHandler = new JsonHandler(getApplicationContext(), "storage.json");
+            NotesFunctions nf = new NotesFunctions();
+            nf.Add_YearNotes(jsonHandler.get_year(2020));
+            notesSpinner.set_NotesFunc(nf);
+            ArrayList<String> s = nf.Get_NotesNames();
+            s.remove("All");
+            notesSpinner.Set_AllNotes(s);
+
+            notesSpinner.spinner_setup(R.id.spin_colourNote);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void Set_Colour_Bars(int r_id, int g_id, int b_id){
@@ -46,7 +72,6 @@ public class ActivityColour extends AppCompatActivity {
             public void onProgressChanged(SeekBar seekBar, int progress,boolean fromUser) {
                 // TODO Auto-generated method stub
                 r = progress;
-                System.out.println(progress + " COLOUR PROGRESS");
                 Update_Colour();
 
             }
@@ -110,6 +135,13 @@ public class ActivityColour extends AppCompatActivity {
             tv.setTextColor(Color.rgb(0,0,0));
             text = false;
         }
+    }
+
+
+    public void Save_Colour(View view){
+        System.out.println("CLICK");
+        NotesColours notesColours = new NotesColours(getApplicationContext());
+        notesColours.Save(notesSpinner.getNote(), r,g,b);
     }
 
 }

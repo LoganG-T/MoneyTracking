@@ -13,6 +13,11 @@
         app:layout_constraintStart_toStartOf="@+id/guideline4"
         app:layout_constraintTop_toTopOf="parent">
 
+        <Spinner
+            android:id="@+id/spin_colourNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <LinearLayout
             android:id="@+id/layout_red"
             android:layout_width="match_parent"
@@ -76,6 +81,13 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             app:srcCompat="@android:color/background_light" />
+
+        <Button
+            android:id="@+id/btn_colourConfirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="Save_Colour"
+            android:text="Confirm colour" />
 
     </LinearLayout>
 

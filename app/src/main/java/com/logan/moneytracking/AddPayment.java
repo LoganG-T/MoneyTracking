@@ -1,6 +1,7 @@
 package com.logan.moneytracking;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -74,6 +75,8 @@ public class AddPayment {
         nf.Add_WeekNotes(json_week);
         temp_total = nf.Get_TotalSpending();
         totalText.setText(cur_sym + String.valueOf(temp_total));
+        NotesColours notesColours = new NotesColours(activity.getApplicationContext());
+        notesColours.Load_Data();
         for(int i = 0; i < json_week.length(); i++){
             JSONArray day_spending = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("spending");
             JSONArray day_notes = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("notes");
@@ -83,6 +86,8 @@ public class AddPayment {
                 pay_view.setText(day_spending.getString(d_i));
                 TextView note_view = cur_layout.findViewWithTag("Notes");
                 note_view.setText(day_notes.getString(d_i));
+                NotesColours.Colour_Data ns = notesColours.Get_Colour(day_notes.getString(d_i));
+                cur_layout.setBackgroundColor(Color.rgb(ns.getR(),ns.getG(),ns.getB()));
                 TextView day_view = cur_layout.findViewWithTag("Day");
                 day_view.setText(json_week.getJSONObject(i).getString("weekday"));
             }

@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -22,6 +23,7 @@ public class ActivityColour extends AppCompatActivity {
     int g = 0;
     int b = 0;
     boolean text = false;
+    boolean set = false;
 
     ColourNotesSpinner notesSpinner;
 
@@ -125,8 +127,12 @@ public class ActivityColour extends AppCompatActivity {
     }
 
     public void Update_Colour(){
+        if(!set){
+            set = true;
+        }
         show_colour.setColorFilter(Color.rgb(r, g, b));
-        TextView tv = findViewById(R.id.text_red);
+        //Used to update text font -> for later uses
+        /*TextView tv = findViewById(R.id.text_red);
         tv.setBackgroundColor(Color.rgb(r,g,b));
         if(! text && (r + g + b < 350)){
             tv.setTextColor(Color.rgb(255,255,255));
@@ -134,14 +140,18 @@ public class ActivityColour extends AppCompatActivity {
         }else if(text && (r + g + b >= 350)){
             tv.setTextColor(Color.rgb(0,0,0));
             text = false;
-        }
+        }*/
     }
 
 
     public void Save_Colour(View view){
-        System.out.println("CLICK");
+        if(!set){
+            return;
+        }
         NotesColours notesColours = new NotesColours(getApplicationContext());
         notesColours.Save(notesSpinner.getNote(), r,g,b);
+        Toast.makeText(getApplicationContext(), "Colour saved", Toast.LENGTH_LONG).show();
+
     }
 
 }

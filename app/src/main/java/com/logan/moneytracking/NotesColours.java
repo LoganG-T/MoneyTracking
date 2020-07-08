@@ -1,6 +1,7 @@
 package com.logan.moneytracking;
 
 import android.content.Context;
+import android.graphics.Color;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -86,6 +87,34 @@ public class NotesColours {
         return "{notes:[]}";
     }
 
+    public void Load_Data(){
+        try {
+            note_data = new JSONObject(Load());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Colour_Data Get_Colour(String s){
+        Colour_Data cd = new Colour_Data(255,255,255);
+
+        JSONArray jsonArray = null;
+        try {
+            jsonArray = note_data.getJSONArray("notes");
+            for(int i = 0; i < jsonArray.length(); i++){
+                if(jsonArray.getJSONObject(i).getString("note_name").equals(s)){
+                    return new Colour_Data(jsonArray.getJSONObject(i).getJSONObject("note_colour").getInt("r"),
+                            jsonArray.getJSONObject(i).getJSONObject("note_colour").getInt("g"),
+                            jsonArray.getJSONObject(i).getJSONObject("note_colour").getInt("b"));
+                }
+            }
+        } catch (JSONException e) {
+        }
+
+
+        return cd;
+    }
+
     public boolean Check_Existing(String s, JSONObject jsonObject){
         JSONArray jsonArray = null;
         try {
@@ -150,7 +179,7 @@ public class NotesColours {
         }
     }
 
-    private class Colour_Data{
+    public class Colour_Data{
         public int r;
         public int g;
         public int b;
@@ -169,6 +198,16 @@ public class NotesColours {
             s += "}";
 
             return s;
+        }
+
+        public int getR(){
+            return r;
+        }
+        public int getG(){
+            return g;
+        }
+        public int getB(){
+            return b;
         }
 
     }

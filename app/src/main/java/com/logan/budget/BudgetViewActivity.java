@@ -1,6 +1,7 @@
 package com.logan.budget;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.view.View;
@@ -93,23 +94,39 @@ public class BudgetViewActivity extends AppCompatActivity {
             System.out.println("BUDGET OVER");
             TextView textView = (TextView) findViewById(R.id.txt_remoney);
             textView.setText("Budget has already ended, view by week?");
+            textView.setTextColor(Color.rgb(0,0,0));
         }else if(budgetManager.before_started(new DateObject(c))){
             TextView textView = (TextView) findViewById(R.id.txt_remoney);
             DateObject d = new DateObject(c);
             d.setDay("Monday");
             textView.setText("Budget starts in " + budgetManager.get_startDiff(d) + " weeks.");
-        }else {
+            textView.setTextColor(Color.rgb(0,0,0));
+        }
+        else {
             DateObject d = new DateObject(c);
             DateObject current_date = new DateObject(Calendar.getInstance());
             String pay_display = "";
-            if(d.before(current_date)){
-
-                pay_display = Float.toString(budgetManager.get_weekSpending(d));
-            }else {
-                pay_display = Float.toString(budgetManager.get_current_week_budget(d));
-            }
             TextView textView = (TextView) findViewById(R.id.txt_remoney);
+            float f = 0;
+            if(d.before(current_date)){
+                pay_display = Float.toString(budgetManager.get_weekSpending(d)) + " spent";
+                textView.setTextColor(Color.rgb(0,0,0));
+            }else if(budgetManager.get_remainingBudget() <= 0){
+                pay_display = "0 Budget has all been spent.";
+                textView.setTextColor(Color.rgb(255,50,50));
+            }
+            else {
+                f = budgetManager.get_current_week_budget(d);
+                pay_display = Float.toString((int)(f * 100) / 100f);
+
+            }
             textView.setText(cur_symb + pay_display);
+            if(f < 0){
+                textView.setTextColor(Color.rgb(255,0,0));
+            }
+            if(f > 0){
+                textView.setTextColor(Color.rgb(0,200,0));
+            }
             TextView textView_total = (TextView) findViewById(R.id.txt_total);
             textView_total.setText(cur_symb + Float.toString(budgetManager.get_totalBudget()));
             TextView textView_left = (TextView) findViewById(R.id.txt_tLeft);

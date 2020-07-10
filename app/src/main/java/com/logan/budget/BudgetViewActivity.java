@@ -77,7 +77,7 @@ public class BudgetViewActivity extends AppCompatActivity {
         //c2.set(Calendar.DAY_OF_WEEK, 2);
         c2.add(Calendar.DAY_OF_WEEK, 6);
         s += c2.get(Calendar.DAY_OF_MONTH);
-        
+
         DateObject dateObject2 = new DateObject(c2);
         s += " " + dateObject2.getMonth();
         textWeek.setText(s + " " + dateObject.getYear());

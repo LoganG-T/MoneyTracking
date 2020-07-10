@@ -35,6 +35,7 @@ public class AddPayment {
         index_list = new ArrayList<IndexInfo>();
         day_counts = new int[7];
         delete_counts = new int[7];
+        notesColours = new NotesColours(activity.getApplicationContext());
         notesColours.Load_Data();
     }
 
@@ -52,7 +53,7 @@ public class AddPayment {
     private int[] delete_counts;
     private float temp_total = 0;
 
-    NotesColours notesColours = new NotesColours(activity.getApplicationContext());
+    NotesColours notesColours;
 
 
     private DateObject current_date;
@@ -94,6 +95,16 @@ public class AddPayment {
                 cur_layout.setBackgroundColor(Color.rgb(ns.getR(),ns.getG(),ns.getB()));
                 TextView day_view = cur_layout.findViewWithTag("Day");
                 day_view.setText(json_week.getJSONObject(i).getString("weekday"));
+
+                if(isColorDark(ns.getR(),ns.getG(),ns.getB())){
+                    pay_view.setTextColor(Color.rgb(255,255,255));
+                    note_view.setTextColor(Color.rgb(255,255,255));
+                    day_view.setTextColor(Color.rgb(255,255,255));
+                }else{
+                    pay_view.setTextColor(Color.rgb(0,0,0));
+                    note_view.setTextColor(Color.rgb(0,0,0));
+                    day_view.setTextColor(Color.rgb(0,0,0));
+                }
             }
         }
     }
@@ -158,6 +169,15 @@ public class AddPayment {
 
                 NotesColours.Colour_Data ns = notesColours.Get_Colour(notes);
                 new_layout.setBackgroundColor(Color.rgb(ns.getR(),ns.getG(),ns.getB()));
+                if(isColorDark(ns.getR(),ns.getG(),ns.getB())){
+                    pay_view.setTextColor(Color.rgb(255,255,255));
+                    note_view.setTextColor(Color.rgb(255,255,255));
+                    day_view.setTextColor(Color.rgb(255,255,255));
+                }else{
+                    pay_view.setTextColor(Color.rgb(0,0,0));
+                    note_view.setTextColor(Color.rgb(0,0,0));
+                    day_view.setTextColor(Color.rgb(0,0,0));
+                }
 
 
                 text.setVisibility(View.GONE);
@@ -175,6 +195,16 @@ public class AddPayment {
         current_date.update_month();
         return "{ \"year\":" + current_date.getYear() + ", \"week\": " + current_date.getWeek() +",\"month\": \"" + current_date.getMonth() +
                 "\", \"weekday\":" + current_date.getDay() + ", \"amount\":[" + payment + "],\"notes\":[" + note + "] }";
+    }
+
+    //https://stackoverflow.com/questions/24260853/check-if-color-is-dark-or-light-in-android
+    public boolean isColorDark(int r, int g, int b){
+        double darkness = 1-(0.299*r + 0.587*g + 0.114*b)/255;
+        if(darkness<0.5){
+            return false; // It's a light color
+        }else{
+            return true; // It's a dark color
+        }
     }
 
     private LinearLayout new_layout(int id, String wday, LinearLayout layout){

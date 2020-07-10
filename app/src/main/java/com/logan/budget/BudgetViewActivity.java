@@ -74,13 +74,10 @@ public class BudgetViewActivity extends AppCompatActivity {
         if(s.length() > 8){
             s+="\n";
         }
-        c2.set(Calendar.DAY_OF_WEEK, 1);
-        c2.add(Calendar.DAY_OF_WEEK, 7);
+        //c2.set(Calendar.DAY_OF_WEEK, 2);
+        c2.add(Calendar.DAY_OF_WEEK, 6);
         s += c2.get(Calendar.DAY_OF_MONTH);
-        for(int i = 0; i < 7; i++){
-            c2.set(Calendar.DAY_OF_WEEK, i+1);
-            System.out.println(c2.get(Calendar.DAY_OF_MONTH) + " i: " + (i+1));
-        }
+        
         DateObject dateObject2 = new DateObject(c2);
         s += " " + dateObject2.getMonth();
         textWeek.setText(s + " " + dateObject.getYear());

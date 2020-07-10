@@ -35,6 +35,7 @@ public class AddPayment {
         index_list = new ArrayList<IndexInfo>();
         day_counts = new int[7];
         delete_counts = new int[7];
+        notesColours.Load_Data();
     }
 
     private Activity activity;
@@ -50,6 +51,9 @@ public class AddPayment {
     private int[] day_counts;
     private int[] delete_counts;
     private float temp_total = 0;
+
+    NotesColours notesColours = new NotesColours(activity.getApplicationContext());
+
 
     private DateObject current_date;
 
@@ -75,8 +79,8 @@ public class AddPayment {
         nf.Add_WeekNotes(json_week);
         temp_total = nf.Get_TotalSpending();
         totalText.setText(cur_sym + String.valueOf(temp_total));
-        NotesColours notesColours = new NotesColours(activity.getApplicationContext());
-        notesColours.Load_Data();
+        /*NotesColours notesColours = new NotesColours(activity.getApplicationContext());
+        notesColours.Load_Data();*/
         for(int i = 0; i < json_week.length(); i++){
             JSONArray day_spending = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("spending");
             JSONArray day_notes = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("notes");
@@ -151,9 +155,11 @@ public class AddPayment {
 
                 temp_total += Float.parseFloat(payment_string);
                 totalText.setText(cur_sym + String.valueOf(temp_total));
-                //float f = Float.parseFloat(payment_string);
-                //add_to_total(f);
-                //edit("labels", payment_string);
+
+                NotesColours.Colour_Data ns = notesColours.Get_Colour(notes);
+                new_layout.setBackgroundColor(Color.rgb(ns.getR(),ns.getG(),ns.getB()));
+
+
                 text.setVisibility(View.GONE);
                 notesText.setVisibility(View.GONE);
 

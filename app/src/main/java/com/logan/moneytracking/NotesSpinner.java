@@ -29,6 +29,7 @@ public class NotesSpinner implements AdapterView.OnItemSelectedListener{
     public Context main_context;
     ArrayAdapter<String> adapter = null;
     ArrayList<String> all_notes;
+    Spinner spinner;
     NotesFunctions notesFunctions;
     String cur_symb = "£";
     int latest_position;
@@ -36,7 +37,7 @@ public class NotesSpinner implements AdapterView.OnItemSelectedListener{
 
     public void spinner_setup(int given_spinner){
 
-        Spinner spinner = (Spinner) activity.findViewById(given_spinner);
+        spinner = (Spinner) activity.findViewById(given_spinner);
         adapter = new ArrayAdapter<String>(main_context,
                 android.R.layout.simple_spinner_item, all_notes);
 
@@ -51,6 +52,7 @@ public class NotesSpinner implements AdapterView.OnItemSelectedListener{
         if(adapter != null) {
             adapter.clear();
             adapter.addAll(all_notes);
+            spinner.setSelection(0);
         }
     }
 
@@ -65,6 +67,9 @@ public class NotesSpinner implements AdapterView.OnItemSelectedListener{
 
 
     public void update_output(){
+        if(all_notes.size() == 0){
+            return;
+        }
         TextView textView = (TextView)activity.findViewById(R.id.note_display);
         textView.setText(cur_symb + String.valueOf(notesFunctions.Get_NotesTotal(all_notes.get(latest_position))));
         TextView textView2 = (TextView)activity.findViewById(R.id.note_total);

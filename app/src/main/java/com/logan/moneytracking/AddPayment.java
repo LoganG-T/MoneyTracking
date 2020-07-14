@@ -240,7 +240,7 @@ public class AddPayment {
     private String payment_toString(String payment, String note){
         current_date.update_month();
         return "{ \"year\":" + current_date.getYear() + ", \"week\": " + current_date.getWeek() +",\"month\": \"" + current_date.getMonth() +
-                "\", \"weekday\":" + current_date.getDay() + ", \"amount\":[" + payment + "],\"notes\":[" + note + "] }";
+                "\", \"weekday\":" + current_date.getDay() + ", \"amount\":[" + payment + "],\"notes\":[\"" + note + "\"] }";
     }
 
     //https://stackoverflow.com/questions/24260853/check-if-color-is-dark-or-light-in-android

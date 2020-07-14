@@ -53,8 +53,21 @@ public class SpendingData {
         name = given_name;
     }
 
+    public String nameString(){
+        String s = "";
+        s += "[";
+        for(int i = 0; i < name.size(); i++){
+            s += "\"" + name.get(i) + "\"";
+            if(i < name.size() - 1){
+                s += ",";
+            }
+        }
+        s += "]";
+        return s;
+    }
+
     public String toString(){
 
-        return "{ \"spending\" :" + amount.toString() + ", \"notes\" : " + name.toString() + "}";
+        return "{ \"spending\" :" + amount.toString() + ", \"notes\" : " + nameString() + "}";
     }
 }

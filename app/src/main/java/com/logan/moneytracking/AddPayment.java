@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -15,7 +16,6 @@ import com.logan.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -32,6 +32,9 @@ public class AddPayment {
         spinnerDay.spinner_setup(R.id.spinDay);
         activity.findViewById(R.id.spinDay).setVisibility(View.INVISIBLE);
         totalText = (TextView)activity.findViewById(R.id.txt_weekTotal);
+        totalWordText = (TextView)activity.findViewById(R.id.txt_totalWords);
+        chk_incoming = (CheckBox)activity.findViewById(R.id.chk_incoming);
+        chk_incoming.setVisibility(View.INVISIBLE);
         index_list = new ArrayList<IndexInfo>();
         day_counts = new int[7];
         delete_counts = new int[7];
@@ -44,7 +47,9 @@ public class AddPayment {
 
     private String cur_sym = "£";
     private TextView totalText;
+    private TextView totalWordText;
     private EditText text;
+    private CheckBox chk_incoming;
     private EditText notesText;
     private SpinnerDay spinnerDay;
     private boolean plus = true;
@@ -79,7 +84,15 @@ public class AddPayment {
         NotesFunctions nf = new NotesFunctions();
         nf.Add_WeekNotes(json_week);
         temp_total = nf.Get_TotalSpending();
-        totalText.setText(cur_sym + String.valueOf(temp_total));
+        if(temp_total < 0){
+            totalWordText.setText("Weeks total incoming:");
+            totalText.setText(cur_sym + String.valueOf(temp_total * -1));
+            totalText.setTextColor(Color.GREEN);
+        }else {
+            totalWordText.setText("Weeks total spending:");
+            totalText.setText(cur_sym + String.valueOf(temp_total));
+            totalText.setTextColor(Color.BLACK);
+        }
         /*NotesColours notesColours = new NotesColours(activity.getApplicationContext());
         notesColours.Load_Data();*/
         for(int i = 0; i < json_week.length(); i++){
@@ -88,7 +101,8 @@ public class AddPayment {
             for(int d_i = 0; d_i < day_spending.length(); d_i++){
                 LinearLayout cur_layout = new_layout(i, json_week.getJSONObject(i).getString("weekday"), l_layout);
                 TextView pay_view = cur_layout.findViewWithTag("Text");
-                pay_view.setText(day_spending.getString(d_i));
+
+
                 TextView note_view = cur_layout.findViewWithTag("Notes");
                 note_view.setText(day_notes.getString(d_i));
                 NotesColours.Colour_Data ns = notesColours.Get_Colour(day_notes.getString(d_i));
@@ -105,6 +119,16 @@ public class AddPayment {
                     note_view.setTextColor(Color.rgb(0,0,0));
                     day_view.setTextColor(Color.rgb(0,0,0));
                 }
+
+                //Add payment after altering the text colour to indicate if the payment was an incoming payment using green font
+                String s = day_spending.getString(d_i);
+                if(s.charAt(0) == '-'){
+                    pay_view.setText(s.substring(1));
+                    pay_view.setTextColor(Color.GREEN);
+                }
+                else{
+                    pay_view.setText(s);
+                }
             }
         }
     }
@@ -117,6 +141,7 @@ public class AddPayment {
 
             text = new EditText(activity);
             text.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
+            chk_incoming.setVisibility(View.VISIBLE);
             layout.addView(text);
             display_notes();
 
@@ -158,17 +183,11 @@ public class AddPayment {
                 note_view.setText(notes);
                 TextView day_view = new_layout.findViewWithTag("Day");
                 day_view.setText(current_date.getDay());
-                //add_notes_layout(notes, layout.getChildCount(), layout);
-                String add_string = payment_toString(payment_string, notes);
-                jsonHandler.Json_add_spending(add_string);
-                SaveLoad sl = new SaveLoad();
-                sl.Save_Data(activity.getApplicationContext(), jsonHandler);
 
-                temp_total += Float.parseFloat(payment_string);
-                totalText.setText(cur_sym + String.valueOf(temp_total));
-
+                //Set the background colour of the notes payment object
                 NotesColours.Colour_Data ns = notesColours.Get_Colour(notes);
                 new_layout.setBackgroundColor(Color.rgb(ns.getR(),ns.getG(),ns.getB()));
+                //Change the font colour to be light if background colour is dark and dark if bg is light
                 if(isColorDark(ns.getR(),ns.getG(),ns.getB())){
                     pay_view.setTextColor(Color.rgb(255,255,255));
                     note_view.setTextColor(Color.rgb(255,255,255));
@@ -179,9 +198,36 @@ public class AddPayment {
                     day_view.setTextColor(Color.rgb(0,0,0));
                 }
 
+                //Check if the payment is an incoming payment
+                if(chk_incoming.isChecked()){
+                    payment_string = "-" + payment_string;
+                    pay_view.setTextColor(Color.GREEN);
+                }
+
+                String add_string = payment_toString(payment_string, notes);
+
+                jsonHandler.Json_add_spending(add_string);
+                SaveLoad sl = new SaveLoad();
+                sl.Save_Data(activity.getApplicationContext(), jsonHandler);
+
+                temp_total += Float.parseFloat(payment_string);
+                if(temp_total < 0){
+                    totalWordText.setText("Weeks total incoming:");
+                    totalText.setText(cur_sym + String.valueOf(temp_total * -1));
+                    totalText.setTextColor(Color.GREEN);
+                }else {
+                    totalWordText.setText("Weeks total spending:");
+                    totalText.setText(cur_sym + String.valueOf(temp_total));
+                    totalText.setTextColor(Color.BLACK);
+                }
+
+
+
 
                 text.setVisibility(View.GONE);
                 notesText.setVisibility(View.GONE);
+                chk_incoming.setChecked(false);
+                chk_incoming.setVisibility(View.INVISIBLE);
 
                 //payment_counter++;
                 ImageButton ib = (ImageButton)activity.findViewById(R.id.imageButton);

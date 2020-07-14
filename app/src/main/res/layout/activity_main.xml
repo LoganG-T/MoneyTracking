@@ -45,13 +45,25 @@
                 android:layout_width="66dp"
                 android:layout_height="45dp"
                 android:text="Pay amount"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:layout_gravity="center"/>
 
             <LinearLayout
                 android:id="@+id/textLayout"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:orientation="vertical"></LinearLayout>
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
+            <CheckBox
+                android:id="@+id/chk_incoming"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="0"
+                android:text="Incoming" />
+
         </LinearLayout>
 
         <LinearLayout
@@ -174,11 +186,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.46"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView10"
+        app:layout_constraintTop_toBottomOf="@+id/txt_totalWords"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
-        android:id="@+id/textView10"
+        android:id="@+id/txt_totalWords"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="92dp"
@@ -195,11 +207,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="£0"
-        app:layout_constraintBottom_toBottomOf="@+id/textView10"
+        app:layout_constraintBottom_toBottomOf="@+id/txt_totalWords"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/textView10"
-        app:layout_constraintTop_toTopOf="@+id/textView10"
+        app:layout_constraintStart_toEndOf="@+id/txt_totalWords"
+        app:layout_constraintTop_toTopOf="@+id/txt_totalWords"
         app:layout_constraintVertical_bias="1.0" />
 
 

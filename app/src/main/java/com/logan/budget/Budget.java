@@ -94,6 +94,14 @@ public class Budget {
         return total_budget;
     }
 
+    public float get_original_weekly_budget(){
+        if(term_time <= 1){
+            return (int)(total_budget / (float)weeks_gone * 100);
+        }
+        int x = (int)(total_budget / (float)(term_time + weeks_gone) * 100);
+        return (float)x / 100f;
+    }
+
     public float get_weekly_budget(){
         //returns the termly payments for the budget
         if(term_time <= 1){

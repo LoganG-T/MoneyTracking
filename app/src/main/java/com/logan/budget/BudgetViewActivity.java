@@ -106,8 +106,13 @@ public class BudgetViewActivity extends AppCompatActivity {
             TextView textView = (TextView) findViewById(R.id.txt_remoney);
             float f = 0;
             if(d.before(current_date)){
-                pay_display = Float.toString(budgetManager.get_weekSpending(d)) + " spent";
-                textView.setTextColor(Color.rgb(0,0,0));
+                float temp_f = budgetManager.get_weekSpending(d);
+                pay_display = Float.toString( temp_f) + " spent";
+                if(temp_f > budgetManager.get_original_week_budget()){
+                    textView.setTextColor(Color.rgb(255,50,50));
+                }else{
+                    textView.setTextColor(Color.rgb(50, 186, 86));
+                }
             }else if(budgetManager.get_remainingBudget() <= 0){
                 pay_display = "0 Budget has all been spent.";
                 textView.setTextColor(Color.rgb(255,50,50));

@@ -100,6 +100,10 @@ public class BudgetManager {
         return budget.get_weekly_budget();
     }
 
+    public float get_original_week_budget(){
+        return budget.get_original_weekly_budget();
+    }
+
     public float get_day_budget(DateObject get_date, float weeks_spending){
         //Returns the budget for the date given on that one day
         float days_left = 7f;

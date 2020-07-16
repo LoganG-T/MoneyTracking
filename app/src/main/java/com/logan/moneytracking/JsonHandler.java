@@ -59,7 +59,6 @@ public class JsonHandler {
 
         //Given json is a json string of the year, week number and the days_spending information to add
         //Example given_json format is { "year":2020, "week":1, "weekday":"Monday", "amount":[1,2,3], "notes"["x","y","z"] }
-        System.out.println(given_json);
         try {
             JSONObject json_obj = new JSONObject(given_json);
 
@@ -96,13 +95,11 @@ public class JsonHandler {
                 weeks.put(json_obj.getInt("week"));
             }else {
                 //Accessing the weekday of the week required
-                //System.out.println("Before " + selected_obj.toString());
-                System.out.println("Before " + current_json.toString());
+;
                 JSONArray weeks_spending = selected_obj.getJSONArray("days").getJSONArray(week_index);
                 JSONObject spending_data = null;
                 for (int i = 0; i < weeks_spending.length(); i++) {
-                    System.out.println("SAME DAY FOUND " + i);
-                    System.out.println(weeks_spending.getJSONObject(i).getString("weekday") + " " + json_obj.getString("weekday"));
+
                     if (weeks_spending.getJSONObject(i).getString("weekday").equals(json_obj.getString("weekday"))) {
                         //Add spending
                         spending_data = weeks_spending.getJSONObject(i).getJSONObject("day_spending");
@@ -132,12 +129,7 @@ public class JsonHandler {
             }
 
 
-            System.out.println("After " + current_json.toString());
             json_string = current_json.toString();
-            /*if(selected_obj != null) {
-                selected_obj.put("year", 3030);
-            }
-            System.out.println("After year change " + selected_obj.toString());*/
 
             return true;
         } catch (JSONException e) {
@@ -289,7 +281,6 @@ public class JsonHandler {
         if(year_obj == null){
             return -1;
         }
-        System.out.println(year_obj.toString());
         JSONArray week_array = year_obj.getJSONArray("week");
         for(int i = 0; i < week_array.length(); i++){
             if(week_array.getInt(i) == week) {

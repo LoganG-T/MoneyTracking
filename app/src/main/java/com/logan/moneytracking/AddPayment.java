@@ -80,7 +80,9 @@ public class AddPayment {
         index_list = new ArrayList<IndexInfo>();
         day_counts = new int[7];
         delete_counts = new int[7];
-        System.out.println("Load another week " + json_week.toString());
+
+        //System.out.println("Load another week " + json_week.toString());
+
         NotesFunctions nf = new NotesFunctions();
         nf.Add_WeekNotes(json_week);
         temp_total = nf.Get_TotalSpending();
@@ -95,11 +97,12 @@ public class AddPayment {
         }
         /*NotesColours notesColours = new NotesColours(activity.getApplicationContext());
         notesColours.Load_Data();*/
+        int id = 1;
         for(int i = 0; i < json_week.length(); i++){
             JSONArray day_spending = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("spending");
             JSONArray day_notes = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("notes");
             for(int d_i = 0; d_i < day_spending.length(); d_i++){
-                LinearLayout cur_layout = new_layout(i, json_week.getJSONObject(i).getString("weekday"), l_layout);
+                LinearLayout cur_layout = new_layout(id, json_week.getJSONObject(i).getString("weekday"), l_layout);
                 TextView pay_view = cur_layout.findViewWithTag("Text");
 
 
@@ -129,6 +132,7 @@ public class AddPayment {
                 else{
                     pay_view.setText(s);
                 }
+                id++;
             }
         }
     }
@@ -159,10 +163,9 @@ public class AddPayment {
             if(i > -1) {
                 payment_string += "00";
                 String s = payment_string.substring(0, i);
-                System.out.println(s);
-                System.out.println(payment_string);
+                //System.out.println(s);
+                //System.out.println(payment_string);
                 String sd = payment_string.substring(i + 1, i + 3);
-                System.out.println(s + " " + sd);
                 payment_string = s + "." + sd;
             }else{
                 payment_string += ".00";
@@ -176,7 +179,7 @@ public class AddPayment {
                 }
                 //add_pay_layout(payment_string, layout.getChildCount(), layout);
                 LinearLayout new_layout = new_layout(layout.getChildCount() + 1, current_date.getDay(), layout);
-                System.out.println("LAYOUT ID " + new_layout.getId());
+
                 TextView pay_view = new_layout.findViewWithTag("Text");
                 pay_view.setText(payment_string);
                 TextView note_view = new_layout.findViewWithTag("Notes");
@@ -294,7 +297,6 @@ public class AddPayment {
             public void onClick(View v){
                 //String jsonStringNum = Integer.toString();
                 int i = newLayout.getId();
-                System.out.println("AFTER 2 LAYOUT ID " + i);
                 removePayment(v, i);
             };
         });
@@ -343,6 +345,7 @@ public class AddPayment {
 
     void removePayment(View view, int id){
 
+
         LinearLayout layout = (LinearLayout) activity.findViewById(id);
 
         //TextView tv = (TextView)layout.getChildAt(1);
@@ -353,6 +356,7 @@ public class AddPayment {
             return;
         }
         layout.removeAllViews();
+
         int c_id = 0;
         for(int i = 0; i < index_list.size(); i++){
             if(index_list.get(i).Get_Index() == id){
@@ -361,12 +365,18 @@ public class AddPayment {
             }
         }
 
+        int r_index = index_list.get(c_id).Get_ArrayPos();
+        if(index_list.get(c_id).Get_ArrayPos() - delete_counts[current_date.getDayInt(index_list.get(c_id).Get_Day()) - 1] >= 0){
+            r_index = (index_list.get(c_id).Get_ArrayPos() - delete_counts[current_date.getDayInt(index_list.get(c_id).Get_Day()) - 1]);
+        }
+
         //{ "year":2020, "week":1, "weekday":"Monday", "index":1}
         String remove_string = "{ \"year\":" + current_date.getYear() +", \"week\":" + current_date.getWeek() +", \"weekday\":\"" + index_list.get(c_id).Get_Day()
-                + "\", \"index\":" + (index_list.get(c_id).Get_ArrayPos() - delete_counts[current_date.getDayInt(index_list.get(c_id).Get_Day()) - 1]) + " }";
+                + "\", \"index\":" + r_index + " }";
+
         delete_counts[current_date.getDayInt(index_list.get(c_id).Get_Day()) - 1] += 1;
         index_list.remove(c_id);
-        System.out.println(remove_string);
+        //System.out.println(remove_string);
         try {
             float deleted_amount = jsonHandler.delete_spending(remove_string);
             SaveLoad sl = new SaveLoad();

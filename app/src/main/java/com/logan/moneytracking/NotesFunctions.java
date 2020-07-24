@@ -152,8 +152,16 @@ public class NotesFunctions {
         return new ArrayList<String>(Arrays.asList(s));
     }
 
-    public Map<String, Float> Get_All_Percents(){
-        Map<String, Float> return_map = new HashMap<String, Float>();
+    public String[] Get_NotesNames_Array(){
+        String[] s = new String[spending_notes.size()];
+        for(int i = 0; i < spending_notes.size(); i++){
+            s[i] = spending_notes.get(i).getNote();
+        }
+        return s;
+    }
+
+    public HashMap<String, Float> Get_All_Percents(){
+        HashMap<String, Float> return_map = new HashMap<String, Float>();
         for(int i = 0; i < spending_notes.size(); i++){
             float perc = spending_notes.get(i).getSpending() / Get_TotalSpending();
             perc *= 10000;

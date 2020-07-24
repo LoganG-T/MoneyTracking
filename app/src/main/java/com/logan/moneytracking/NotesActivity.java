@@ -54,11 +54,12 @@ public class NotesActivity extends AppCompatActivity {
             SpinnerYear spinnerYear = new SpinnerYear(this, getApplicationContext(), current_date);
             spinnerYear.spinner_setup(current_date.getYear(), R.id.n_yearSpin);
 
-            update_pageData();
-
             g_draw = findViewById(R.id.graph_draw);
 
             g_draw.setLayoutParams(new LinearLayout.LayoutParams(g_draw.width,g_draw.width/2));
+
+
+            update_pageData();
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -97,7 +98,10 @@ public class NotesActivity extends AppCompatActivity {
             notesSpinner.set_NotesFunc(nf);
             notesSpinner.Set_AllNotes(nf.Get_NotesNames());
             notesSpinner.update_output();
-            nf.Get_All_Percents();
+
+            if(g_draw != null){
+                g_draw.Set_PieChart(nf.Get_All_Percents(), nf.Get_NotesNames_Array());
+            }
 
 
         } catch (JSONException e) {

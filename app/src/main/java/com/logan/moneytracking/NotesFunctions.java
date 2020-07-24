@@ -6,6 +6,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 public class NotesFunctions {
 
@@ -148,6 +150,19 @@ public class NotesFunctions {
             s[i + 1] = spending_notes.get(i).getNote();
         }
         return new ArrayList<String>(Arrays.asList(s));
+    }
+
+    public Map<String, Float> Get_All_Percents(){
+        Map<String, Float> return_map = new HashMap<String, Float>();
+        for(int i = 0; i < spending_notes.size(); i++){
+            float perc = spending_notes.get(i).getSpending() / Get_TotalSpending();
+            perc *= 10000;
+            perc = (int)perc;
+            perc = (perc / 100f);
+            return_map.put(spending_notes.get(i).getNote(), perc);
+        }
+
+        return return_map;
     }
 
 

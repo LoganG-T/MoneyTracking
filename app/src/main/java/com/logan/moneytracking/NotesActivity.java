@@ -1,8 +1,11 @@
 package com.logan.moneytracking;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -19,6 +22,7 @@ public class NotesActivity extends AppCompatActivity {
     NotesSpinner notesSpinner;
     DateObject current_date;
     JsonHandler js;
+    GraphDraw g_draw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,10 @@ public class NotesActivity extends AppCompatActivity {
             spinnerYear.spinner_setup(current_date.getYear(), R.id.n_yearSpin);
 
             update_pageData();
+
+            g_draw = findViewById(R.id.graph_draw);
+
+            g_draw.setLayoutParams(new LinearLayout.LayoutParams(g_draw.width,g_draw.width/2));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -89,6 +97,8 @@ public class NotesActivity extends AppCompatActivity {
             notesSpinner.set_NotesFunc(nf);
             notesSpinner.Set_AllNotes(nf.Get_NotesNames());
             notesSpinner.update_output();
+            nf.Get_All_Percents();
+
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -111,6 +111,7 @@ public class NotesActivity extends AppCompatActivity {
 
     public void confirm_dates(View view) {
         update_pageData();
+        g_draw.Draw_Again();
     }
 
 

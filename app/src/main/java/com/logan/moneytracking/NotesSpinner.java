@@ -58,6 +58,7 @@ public class NotesSpinner implements AdapterView.OnItemSelectedListener{
 
     public void Set_AllNotes(ArrayList<String> s){
         all_notes = s;
+        latest_position = 0;
         update_notes();
     }
 

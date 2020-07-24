@@ -8,13 +8,15 @@ import android.graphics.Paint;
 import android.graphics.Point;
 import android.util.AttributeSet;
 import android.view.Display;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 
 import java.util.HashMap;
 
 //Example https://guides.codepath.com/android/Basic-Painting-with-Views
-public class GraphDraw extends View {
+public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
 
     private final int paintColor = Color.BLACK;
     int width;
@@ -23,6 +25,8 @@ public class GraphDraw extends View {
     HashMap<String, Float> percents;
     double[] percent_sums;
     String[] names;
+
+    SurfaceHolder holder;
     // defines paint and canvas
     private Paint drawPaint;
 
@@ -32,6 +36,9 @@ public class GraphDraw extends View {
         setFocusable(true);
         setFocusableInTouchMode(true);
          */
+        holder = getHolder();
+
+        holder.addCallback(this);
         setupPaint();
         WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         Display display = wm.getDefaultDisplay();
@@ -53,6 +60,7 @@ public class GraphDraw extends View {
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
     }
 
+    /*use for view not surfaceview
     @Override
     public void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -75,6 +83,7 @@ public class GraphDraw extends View {
             changed = false;
         }
     }
+    */
 
     public void Set_PieChart(HashMap<String, Float> given_percents, String[] given_names){
         percents = given_percents;
@@ -85,6 +94,10 @@ public class GraphDraw extends View {
             percent_sums[i] = percent_sums[i - 1] + ((double)percents.get(names[i]) * 3.6);
         }
         changed = true;
+    }
+
+    public void Draw_Again(){
+        surfaceCreated(holder);
     }
 
     public int Chart_Colours(int x, int y, int c_x, int c_y){
@@ -116,5 +129,39 @@ public class GraphDraw extends View {
             }
         }
         return c_array[5];
+    }
+
+    //https://riptutorial.com/android/example/13004/surfaceview-with-drawing-thread example
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        if (changed) {
+            Canvas canvas = holder.lockCanvas();
+            System.out.println("DRAW NOW");
+            canvas.drawCircle(width / 4, width / 8, width / 8, drawPaint);
+            //drawPaint.setColor(Color.GREEN);
+            int x_center = width / 4;
+            int y_center = width / 8;
+            int circle_diameter = width / 4;
+            for (int y = (width / 8) - (width / 8); y < (width / 8) + (width / 8); y++) {
+                for (int x = (width / 4) - (width / 8); x < (width / 4) + (width / 8); x++) {
+                    if ((x - x_center) * (x - x_center) + (y - y_center) * (y - y_center) <= circle_diameter / 2 * circle_diameter / 2) {
+                        drawPaint.setColor(Chart_Colours(x,y,x_center, y_center));
+                        canvas.drawPoint(x, y, drawPaint);
+                    }
+                }
+            }
+            changed = false;
+            holder.unlockCanvasAndPost(canvas);
+        }
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
     }
 }

@@ -126,8 +126,10 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/note_percent">
+
 
         <com.logan.moneytracking.GraphDraw
             android:id="@+id/graph_draw"

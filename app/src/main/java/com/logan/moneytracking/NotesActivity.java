@@ -6,6 +6,7 @@ import android.provider.CalendarContract;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -56,7 +57,7 @@ public class NotesActivity extends AppCompatActivity {
 
             g_draw = findViewById(R.id.graph_draw);
 
-            g_draw.setLayoutParams(new LinearLayout.LayoutParams(g_draw.width,g_draw.width/2));
+            g_draw.setLayoutParams(new LinearLayout.LayoutParams(g_draw.width/2,g_draw.width/2));
 
 
             update_pageData();
@@ -98,6 +99,15 @@ public class NotesActivity extends AppCompatActivity {
             notesSpinner.set_NotesFunc(nf);
             notesSpinner.Set_AllNotes(nf.Get_NotesNames());
             notesSpinner.update_output();
+
+            LinearLayout gLegend = findViewById(R.id.lin_gLegends);
+            gLegend.removeAllViews();
+            for(int i = 0; i < nf.Get_NotesNames_Array().length; i++){
+                TextView textView = new TextView(getApplicationContext());
+                textView.setText(nf.Get_NotesNames_Array()[i]);
+                textView.setTextColor(g_draw.Get_Percent_Color(i));
+                gLegend.addView(textView);
+            }
 
             if(g_draw != null){
                 g_draw.Set_PieChart(nf.Get_All_Percents(), nf.Get_NotesNames_Array());

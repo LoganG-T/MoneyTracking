@@ -135,6 +135,18 @@
             android:id="@+id/graph_draw"
             android:layout_width="wrap_content"
             android:layout_height="133dp" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/lin_gLegends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
     </LinearLayout>
 
 

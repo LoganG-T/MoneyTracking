@@ -57,7 +57,7 @@ public class NotesActivity extends AppCompatActivity {
 
             g_draw = findViewById(R.id.graph_draw);
 
-            g_draw.setLayoutParams(new LinearLayout.LayoutParams(g_draw.width/2,g_draw.width/2));
+            g_draw.setLayoutParams(new LinearLayout.LayoutParams((g_draw.width/4) + 10,(g_draw.width/4) + 10));
 
 
             update_pageData();

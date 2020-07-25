@@ -48,14 +48,20 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
         width = size.x;
         height = size.y;
 
-        c_array = new int[6];
+        c_array = new int[12];
 
         c_array[0] = Color.rgb(100,100,100);
         c_array[1] = Color.rgb(255,0,0);
         c_array[2] = Color.rgb(40,200,40);
-        c_array[3] = Color.rgb(0,0,255);
-        c_array[4] = Color.rgb(0,255,255);
+        c_array[3] = Color.rgb(40,40,255);
+        c_array[4] = Color.rgb(40,255,255);
         c_array[5] = Color.rgb(255,0,255);
+        c_array[6] = Color.rgb(252, 186, 3);
+        c_array[7] = Color.rgb(252, 74, 3);
+        c_array[8] = Color.rgb(3, 252, 219);
+        c_array[9] = Color.rgb(3, 136, 252);
+        c_array[10] = Color.rgb(200, 0, 255);
+        c_array[11] = Color.rgb(255, 0, 136);
     }
 
     private void setupPaint() {
@@ -152,13 +158,13 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
         if (changed) {
             Canvas canvas = holder.lockCanvas();
             System.out.println("DRAW NOW");
-            canvas.drawCircle(width / 4, width / 8, width / 8, drawPaint);
+            canvas.drawCircle((width / 8) + 5, width / 8, width / 8, drawPaint);
             //drawPaint.setColor(Color.GREEN);
-            int x_center = width / 4;
-            int y_center = width / 8;
+            int x_center = (width / 8) + 5;
+            int y_center = (width / 8) + 5;
             int circle_diameter = width / 4;
-            for (int y = (width / 8) - (width / 8); y < (width / 8) + (width / 8); y++) {
-                for (int x = (width / 4) - (width / 8); x < (width / 4) + (width / 8); x++) {
+            for (int y = y_center - y_center; y < y_center + y_center; y++) {
+                for (int x = x_center - x_center; x < x_center + x_center; x++) {
                     if ((x - x_center) * (x - x_center) + (y - y_center) * (y - y_center) <= circle_diameter / 2 * circle_diameter / 2) {
                         drawPaint.setColor(Chart_Colours(x,y,x_center, y_center));
                         canvas.drawPoint(x, y, drawPaint);

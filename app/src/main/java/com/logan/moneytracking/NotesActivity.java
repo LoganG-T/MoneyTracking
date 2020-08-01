@@ -1,6 +1,7 @@
 package com.logan.moneytracking;
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.provider.CalendarContract;
 import android.view.View;
@@ -100,17 +101,18 @@ public class NotesActivity extends AppCompatActivity {
             notesSpinner.Set_AllNotes(nf.Get_NotesNames());
             notesSpinner.update_output();
 
+            if(g_draw != null){
+                g_draw.Set_PieChart(nf.Get_All_Percents(), nf.Get_NotesNames_Array());
+            }
+
             LinearLayout gLegend = findViewById(R.id.lin_gLegends);
+            gLegend.setBackgroundColor(Color.rgb(5,5,5));
             gLegend.removeAllViews();
             for(int i = 0; i < nf.Get_NotesNames_Array().length; i++){
                 TextView textView = new TextView(getApplicationContext());
                 textView.setText(nf.Get_NotesNames_Array()[i]);
                 textView.setTextColor(g_draw.Get_Percent_Color(i));
                 gLegend.addView(textView);
-            }
-
-            if(g_draw != null){
-                g_draw.Set_PieChart(nf.Get_All_Percents(), nf.Get_NotesNames_Array());
             }
 
 

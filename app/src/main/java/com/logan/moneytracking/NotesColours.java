@@ -74,7 +74,6 @@ public class NotesColours {
                 while ((line = bufferedReader.readLine()) != null) {
                     sb.append(line);
                 }
-                System.out.println("LOADED " + sb.toString());
                 return sb.toString();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -208,6 +207,13 @@ public class NotesColours {
         }
         public int getB(){
             return b;
+        }
+
+        public boolean isPure(){
+            if((r >= 250 && g >= 250 && b >= 250) || r <= 5 && g <= 5 && b <= 5){
+                return true;
+            }
+            return false;
         }
 
     }

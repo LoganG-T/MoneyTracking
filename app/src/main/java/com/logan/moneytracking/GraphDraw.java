@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
+import android.provider.ContactsContract;
 import android.util.AttributeSet;
 import android.view.Display;
 import android.view.SurfaceHolder;
@@ -22,6 +23,7 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
     int width;
     int height;
     boolean changed = true;
+    boolean empty = false;
     HashMap<String, Float> percents;
     float[] percent_sums;
     String[] names;
@@ -50,18 +52,18 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
 
         c_array = new int[12];
 
-        c_array[0] = Color.rgb(100,100,100);
-        c_array[1] = Color.rgb(255,0,0);
-        c_array[2] = Color.rgb(40,200,40);
-        c_array[3] = Color.rgb(40,40,255);
-        c_array[4] = Color.rgb(40,255,255);
-        c_array[5] = Color.rgb(255,0,255);
-        c_array[6] = Color.rgb(252, 186, 3);
-        c_array[7] = Color.rgb(252, 74, 3);
-        c_array[8] = Color.rgb(3, 252, 219);
-        c_array[9] = Color.rgb(3, 136, 252);
-        c_array[10] = Color.rgb(200, 0, 255);
-        c_array[11] = Color.rgb(255, 0, 136);
+        c_array[0] = Color.rgb(255,61,61);
+        c_array[1] = Color.rgb(255,118,33);
+        c_array[2] = Color.rgb(255,151,15);
+        c_array[3] = Color.rgb(255,179,15);
+        c_array[4] = Color.rgb(255,211,13);
+        c_array[5] = Color.rgb(255,233,0);
+        c_array[6] = Color.rgb(113, 225, 11);
+        c_array[7] = Color.rgb(77, 199, 37);
+        c_array[8] = Color.rgb(52, 179, 113);
+        c_array[9] = Color.rgb(52, 119, 186);
+        c_array[10] = Color.rgb(149, 91, 194);
+        c_array[11] = Color.rgb(224, 74, 177);
     }
 
     private void setupPaint() {
@@ -101,19 +103,25 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
 
     public void Set_PieChart(HashMap<String, Float> given_percents, String[] given_names){
         if(given_names == null || given_names.length == 0){
+            empty = true;
             return;
         }
         percents = given_percents;
         names = given_names;
+        NotesColours notesColours = new NotesColours(getContext());
+        notesColours.Load_Data();
+        for(int i = 0; i < names.length; i++){
+            NotesColours.Colour_Data cd = notesColours.Get_Colour(names[i]);
+            if(! cd.isPure()){
+                c_array[i] = Color.rgb(cd.getR(),cd.getG(),cd.getB());
+            }
+        }
         percent_sums = new float[names.length];
         percent_sums[0] = 0;
         for(int i = 1; i < names.length; i++){
             percent_sums[i] = percent_sums[i - 1] + (percents.get(names[i - 1]) * 3.6f);
         }
 
-        for(int i = 0; i < names.length; i++){
-            System.out.println("PERCENT " + percents.get(names[i]) + " SUMS " + percent_sums[i]);
-        }
         changed = true;
     }
 
@@ -130,24 +138,19 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
         if (f < 0) {
             f += 360;
         }
-        int sum_count = 0;
         //3.6 is 1% of 360 -> degrees in circle
         for(int i = 0; i < percents.size();i++){
-            /*if(f >= percent_sums[i] && f < (3.6 * percents.get(names[i]))){
-                return c_array[i];
-            }*/
             if(f >= percent_sums[i] && f < percent_sums[i] +(3.6 * percents.get(names[i]))){
                 return Get_Percent_Color(i);
             }
-            /*else if(f >= percent_sums[i] && f < percent_sums[sum_count] +(3.6 * percents.get(names[i]))){
-                return c_array[i];
-            }*/
         }
-        System.out.println(f);
         return Get_Percent_Color(0);
     }
 
     public int Get_Percent_Color(int index){
+        if(index >= c_array.length){
+            return c_array[0];
+        }
 
         return c_array[index];
     }
@@ -155,10 +158,15 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
     //https://riptutorial.com/android/example/13004/surfaceview-with-drawing-thread example
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        if(empty){
+            Canvas canvas = holder.lockCanvas();
+            canvas.drawColor(Color.BLACK);
+            holder.unlockCanvasAndPost(canvas);
+            empty = false;
+        }
         if (changed) {
             Canvas canvas = holder.lockCanvas();
-            System.out.println("DRAW NOW");
-            canvas.drawCircle((width / 8) + 5, width / 8, width / 8, drawPaint);
+            //canvas.drawCircle((width / 8) + 5, width / 8, width / 8, drawPaint);
             //drawPaint.setColor(Color.GREEN);
             int x_center = (width / 8) + 5;
             int y_center = (width / 8) + 5;

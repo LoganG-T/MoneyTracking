@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 
@@ -130,6 +131,24 @@ public class MainActivity extends AppCompatActivity {
         System.out.println("LOAD WEEK " + new_week);
         JSONArray jsonArray = jsonHandler.get_week(dateObject.getYear(), new_week);
         addPayment.load_another_week(jsonArray, (LinearLayout) findViewById(R.id.payment_layout));
+    }
+
+    public void Spending_Option_Yes(View view){
+        Spinner s = findViewById(R.id.spin_spending_budgets);
+        s.setVisibility(View.VISIBLE);
+        Button b = findViewById(R.id.btn_spending_confirm);
+        b.setVisibility(View.VISIBLE);
+    }
+
+    public void Spending_Option_No(View view){
+        Button b = findViewById(R.id.btn_spending_confirm);
+        b.setVisibility(View.VISIBLE);
+    }
+
+    public void Confirm_Spending_Option(View view){
+        Button b = findViewById(R.id.btn_spending_confirm);
+        b.setVisibility(View.INVISIBLE);
+        addPayment.Confirm_Spending_Options();
     }
 
 }

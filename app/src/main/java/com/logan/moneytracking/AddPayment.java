@@ -12,6 +12,8 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
+import androidx.constraintlayout.widget.ConstraintLayout;
+
 import com.logan.R;
 
 import org.json.JSONArray;
@@ -205,6 +207,11 @@ public class AddPayment {
                 if(chk_incoming.isChecked()){
                     payment_string = "-" + payment_string;
                     pay_view.setTextColor(Color.GREEN);
+
+                    //Display the 'pop-out' to allow the user to choose if the incoming amount will be added to a budget
+                    ConstraintLayout incoming_layout = activity.findViewById(R.id.cons_spending_layout);
+                    incoming_layout.setVisibility(View.VISIBLE);
+
                 }
 
                 String add_string = payment_toString(payment_string, notes);
@@ -310,6 +317,12 @@ public class AddPayment {
         newLayout.addView(b);
         layout.addView(newLayout);
         return newLayout;
+    }
+
+    public void Confirm_Spending_Options(){
+        //Hides the 'pop-out' that allows the user to choose if the incoming amount will be added to a budget
+        ConstraintLayout incoming_layout = activity.findViewById(R.id.cons_spending_layout);
+        incoming_layout.setVisibility(View.INVISIBLE);
     }
 
     private void display_notes(){

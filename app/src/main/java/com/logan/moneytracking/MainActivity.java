@@ -10,11 +10,17 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import com.logan.R;
+import com.logan.budget.Budget;
+import com.logan.budget.BudgetManager;
+import com.logan.budget.BudgetSpinner;
+import com.logan.budget.BudgetMuiltiChoiceSpinner;
 
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
@@ -24,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     SpinnerPayWeek spinnerWeek;
     DateObject dateObject;
     AddPayment addPayment;
+
+    BudgetMuiltiChoiceSpinner budgetSpinner;
 
     public MainActivity(){
         jsonHandler = null;
@@ -138,6 +146,17 @@ public class MainActivity extends AppCompatActivity {
         s.setVisibility(View.VISIBLE);
         Button b = findViewById(R.id.btn_spending_confirm);
         b.setVisibility(View.VISIBLE);
+        //jsonHandler  = new JsonHandler(getApplicationContext(), "storage.json");
+        BudgetManager budgetManager = new BudgetManager(jsonHandler);
+        if(budgetManager.is_file(getApplicationContext())) {
+            budgetManager.load_budget(getApplicationContext());
+        }else{
+            budgetManager.create_file(getApplicationContext());
+        }
+
+        budgetSpinner = new BudgetMuiltiChoiceSpinner(this, getApplicationContext(), budgetManager);
+
+        budgetSpinner.spinner_setup(R.id.spin_spending_budgets);
     }
 
     public void Spending_Option_No(View view){
@@ -148,6 +167,11 @@ public class MainActivity extends AppCompatActivity {
     public void Confirm_Spending_Option(View view){
         Button b = findViewById(R.id.btn_spending_confirm);
         b.setVisibility(View.INVISIBLE);
+        //Testing code
+        ArrayList<String> test = budgetSpinner.Chosen_Budgets();
+        for(int i = 0; i < test.size(); i++){
+            System.out.println(test.get(i));
+        }
         addPayment.Confirm_Spending_Options();
     }
 

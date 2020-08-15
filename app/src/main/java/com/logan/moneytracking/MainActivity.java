@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.logan.R;
 import com.logan.budget.Budget;
@@ -169,9 +170,33 @@ public class MainActivity extends AppCompatActivity {
         b.setVisibility(View.INVISIBLE);
         //Testing code
         ArrayList<String> test = budgetSpinner.Chosen_Budgets();
-        for(int i = 0; i < test.size(); i++){
-            System.out.println(test.get(i));
+
+        if(test.size() > 0) {
+
+            BudgetManager budgetManager = new BudgetManager(jsonHandler);
+            if(budgetManager.is_file(getApplicationContext())) {
+                budgetManager.load_budget(getApplicationContext());
+            }else{
+                budgetManager.create_file(getApplicationContext());
+            }
+
+            for (int i = 0; i < test.size(); i++) {
+                boolean x = budgetManager.add_to_total_budget(test.get(i), "total_budget", addPayment.Get_Latest_Incoming());
+
+                if (x) {
+                    budgetManager.save_UpdateBudget(getApplicationContext());
+                    //Small confirmation displayed to user
+                }
+            }
+            String s = "Budget";
+
+            if (test.size() > 1) {
+                s += "s";
+            }
+
+            Toast.makeText(getApplicationContext(), s + " updated", Toast.LENGTH_LONG).show();
         }
+
         addPayment.Confirm_Spending_Options();
     }
 

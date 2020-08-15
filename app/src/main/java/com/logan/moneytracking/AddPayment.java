@@ -60,6 +60,8 @@ public class AddPayment {
     private int[] delete_counts;
     private float temp_total = 0;
 
+    private String latest_incoming = "";
+
     NotesColours notesColours;
 
 
@@ -205,6 +207,7 @@ public class AddPayment {
 
                 //Check if the payment is an incoming payment
                 if(chk_incoming.isChecked()){
+                    latest_incoming = payment_string;
                     payment_string = "-" + payment_string;
                     pay_view.setTextColor(Color.GREEN);
 
@@ -325,6 +328,10 @@ public class AddPayment {
         incoming_layout.setVisibility(View.INVISIBLE);
     }
 
+    public String Get_Latest_Incoming(){
+        return latest_incoming;
+    }
+
     private void display_notes(){
         LinearLayout layout = (LinearLayout) activity.findViewById(R.id.notesTextLayout);
 
@@ -357,7 +364,6 @@ public class AddPayment {
 
 
     void removePayment(View view, int id){
-
 
         LinearLayout layout = (LinearLayout) activity.findViewById(id);
 

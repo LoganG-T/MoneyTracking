@@ -11,16 +11,13 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.logan.R;
-import com.logan.budget.Budget;
 import com.logan.budget.BudgetManager;
-import com.logan.budget.BudgetSpinner;
 import com.logan.budget.BudgetMuiltiChoiceSpinner;
 
 
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -53,12 +50,10 @@ public class MainActivity extends AppCompatActivity {
 
             load_app_data(sl);
 
-            //do the json parsing here and do the rest of functionality of app
         } else {
             boolean isFileCreated = sl.Create_Data(getApplicationContext(), "storage.json", "");
             if(isFileCreated) {
                 load_app_data(sl);
-                //proceed with storing the first todo  or show ui
             } else {
                 //show error or try again.
             }
@@ -70,13 +65,6 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             jsonHandler = new JsonHandler(getApplicationContext(), "storage.json", sl);
-
-
-            //final LoadPage loadPage = new LoadPage(MainActivity.this, jsonHandler);
-
-
-            //DropDown dd = new DropDown(MainActivity.this, this, loadPage);
-            //dd.main_call_this(2020);
 
             Calendar calendar = Calendar.getInstance();
             dateObject = new DateObject(calendar);
@@ -92,21 +80,11 @@ public class MainActivity extends AppCompatActivity {
 
             addPayment.load_plus_button();
 
-            //loadPage.load_plus_button();
-
-            //loadPage.load_day_buttons(loadPage);
-
             Load_Week(dateObject.getWeek() + 1);
         } catch (JSONException e) {
             e.printStackTrace();
             //Big error restart the program again and display error message
         }
-
-        //jsonHandler.Json_add_spending("{ \"year\":2020, \"week\":1, \"weekday\":\"Monday\", \"amount\":[\"1.00\",\"2.00\",\"3.00\"], \"notes\":[\"x\",\"y\",\"z\"] }");
-        //sl.Save_Data(getApplicationContext(), jsonHandler);
-
-
-        //sl.delete_file(getApplicationContext(), "storage.json");
     }
 
     public void Next_Week(View view){
@@ -137,17 +115,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void Load_Week(int new_week) throws JSONException {
-        System.out.println("LOAD WEEK " + new_week);
         JSONArray jsonArray = jsonHandler.get_week(dateObject.getYear(), new_week);
         addPayment.load_another_week(jsonArray, (LinearLayout) findViewById(R.id.payment_layout));
     }
+
+
+    //Start of incoming budgets options
 
     public void Spending_Option_Yes(View view){
         Spinner s = findViewById(R.id.spin_spending_budgets);
         s.setVisibility(View.VISIBLE);
         Button b = findViewById(R.id.btn_spending_confirm);
         b.setVisibility(View.VISIBLE);
-        //jsonHandler  = new JsonHandler(getApplicationContext(), "storage.json");
+
         BudgetManager budgetManager = new BudgetManager(jsonHandler);
         if(budgetManager.is_file(getApplicationContext())) {
             budgetManager.load_budget(getApplicationContext());
@@ -165,13 +145,14 @@ public class MainActivity extends AppCompatActivity {
         b.setVisibility(View.VISIBLE);
     }
 
+    //Selects the chosen budgets from the drop-down tick spinner and adds the incoming payment to the selects budgets totals
     public void Confirm_Spending_Option(View view){
         Button b = findViewById(R.id.btn_spending_confirm);
         b.setVisibility(View.INVISIBLE);
-        //Testing code
-        ArrayList<String> test = budgetSpinner.Chosen_Budgets();
 
-        if(test.size() > 0) {
+        ArrayList<String> display_budgets = budgetSpinner.Chosen_Budgets();
+
+        if(display_budgets.size() > 0) {
 
             BudgetManager budgetManager = new BudgetManager(jsonHandler);
             if(budgetManager.is_file(getApplicationContext())) {
@@ -180,17 +161,18 @@ public class MainActivity extends AppCompatActivity {
                 budgetManager.create_file(getApplicationContext());
             }
 
-            for (int i = 0; i < test.size(); i++) {
-                boolean x = budgetManager.add_to_total_budget(test.get(i), "total_budget", addPayment.Get_Latest_Incoming());
+            for (int i = 0; i < display_budgets.size(); i++) {
+                boolean x = budgetManager.add_to_total_budget(display_budgets.get(i), "total_budget", addPayment.Get_Latest_Incoming());
 
                 if (x) {
                     budgetManager.save_UpdateBudget(getApplicationContext());
-                    //Small confirmation displayed to user
                 }
             }
+
+            //Small confirmation displayed to user
             String s = "Budget";
 
-            if (test.size() > 1) {
+            if (display_budgets.size() > 1) {
                 s += "s";
             }
 
@@ -199,5 +181,7 @@ public class MainActivity extends AppCompatActivity {
 
         addPayment.Confirm_Spending_Options();
     }
+
+    //End of incoming budgets options
 
 }

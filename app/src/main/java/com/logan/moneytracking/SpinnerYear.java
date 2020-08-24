@@ -15,7 +15,6 @@ public class SpinnerYear extends SpinnerTotals {
         current_date = d;
     }
     int start_year;
-    //boolean month_req = false;
     int r_id;
 
     public void set_month_req(int r){
@@ -37,23 +36,17 @@ public class SpinnerYear extends SpinnerTotals {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        //Need to minus 1 because it is zero-index'd
-        //month_req = false;
+
         spinner.setSelection((int)(years.length / 2f));
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 
-        //  System.out.println("POS " + position);
-        //load_page.setCurrent_week(position + 1);
         current_date.setYear(start_year + position);
         if(r_id != 0) {
             activity.findViewById(r_id).setVisibility(View.VISIBLE);
         }
-
-        //load_page.set_dates();
-
     }
 
 }

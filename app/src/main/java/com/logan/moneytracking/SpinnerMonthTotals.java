@@ -13,16 +13,15 @@ import com.logan.R;
 
 import org.json.JSONException;
 
-public class SpinnerMonthOld extends SpinnerTotals {
+public class SpinnerMonthTotals extends SpinnerTotals {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.out.println("DROP WORK");
-
     }
 
-    public SpinnerMonthOld(Activity a, Context c, TotalHandler t) throws JSONException {
+    public SpinnerMonthTotals(Activity a, Context c, TotalHandler t) throws JSONException {
         activity = a;
         main_context = c;
         totalHandler = t;
@@ -46,15 +45,13 @@ public class SpinnerMonthOld extends SpinnerTotals {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        //Need to minus 1 because it is zero-index'd
+
         spinner.setSelection(0);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 
-        //  System.out.println("POS " + position);
-        //load_page.setCurrent_week(position + 1);
         try {
             if(textView != null) {
                 textView.setText(String.valueOf(totalHandler.get_month_total(get_full_month(position))));
@@ -63,7 +60,6 @@ public class SpinnerMonthOld extends SpinnerTotals {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        //load_page.set_dates();
     }
 
 }

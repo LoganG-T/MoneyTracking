@@ -24,13 +24,34 @@ import java.util.Calendar;
 
 public class AddPayment {
 
+    private Activity activity;
+    private final JsonHandler jsonHandler;
+
+    private String cur_sym = "£";
+    private TextView totalText;
+    private TextView totalWordText;
+    private EditText text;
+    private CheckBox chk_incoming;
+    private EditText notesText;
+    private boolean plus = true;
+    private ArrayList<IndexInfo> index_list;
+    private int[] day_counts;
+    private int[] delete_counts;
+    private float temp_total = 0;
+
+    private String latest_incoming = "";
+
+    private NotesColours notesColours;
+
+
+    private DateObject current_date;
+
     public AddPayment(Activity new_activity, JsonHandler js, DateObject d){
 
         activity = new_activity;
         jsonHandler = js;
-        Calendar calendar = Calendar.getInstance();
         current_date = d;
-        spinnerDay = new SpinnerDay(activity, activity.getApplicationContext(), current_date);
+        SpinnerDay spinnerDay = new SpinnerDay(activity, activity.getApplicationContext(), current_date);
         spinnerDay.spinner_setup(R.id.spinDay);
         activity.findViewById(R.id.spinDay).setVisibility(View.INVISIBLE);
         totalText = (TextView)activity.findViewById(R.id.txt_weekTotal);
@@ -44,28 +65,7 @@ public class AddPayment {
         notesColours.Load_Data();
     }
 
-    private Activity activity;
-    final JsonHandler jsonHandler;
 
-    private String cur_sym = "£";
-    private TextView totalText;
-    private TextView totalWordText;
-    private EditText text;
-    private CheckBox chk_incoming;
-    private EditText notesText;
-    private SpinnerDay spinnerDay;
-    private boolean plus = true;
-    private ArrayList<IndexInfo> index_list;
-    private int[] day_counts;
-    private int[] delete_counts;
-    private float temp_total = 0;
-
-    private String latest_incoming = "";
-
-    NotesColours notesColours;
-
-
-    private DateObject current_date;
 
     public void load_plus_button(){
         ImageButton b = (ImageButton) activity.findViewById(R.id.imageButton);
@@ -99,8 +99,8 @@ public class AddPayment {
             totalText.setText(cur_sym + String.valueOf(temp_total));
             totalText.setTextColor(Color.BLACK);
         }
-        /*NotesColours notesColours = new NotesColours(activity.getApplicationContext());
-        notesColours.Load_Data();*/
+
+        //Displaying all payment info for the selected week, initiating and loading each LinearLayout with payment text and setting colours
         int id = 1;
         for(int i = 0; i < json_week.length(); i++){
             JSONArray day_spending = json_week.getJSONObject(i).getJSONObject("day_spending").getJSONArray("spending");
@@ -110,13 +110,16 @@ public class AddPayment {
                 TextView pay_view = cur_layout.findViewWithTag("Text");
 
 
+                //Setting payment and day text
                 TextView note_view = cur_layout.findViewWithTag("Notes");
                 note_view.setText(day_notes.getString(d_i));
+                //Setting payment background colour
                 NotesColours.Colour_Data ns = notesColours.Get_Colour(day_notes.getString(d_i));
                 cur_layout.setBackgroundColor(Color.rgb(ns.getR(),ns.getG(),ns.getB()));
                 TextView day_view = cur_layout.findViewWithTag("Day");
                 day_view.setText(json_week.getJSONObject(i).getString("weekday"));
 
+                //Set text colour to allow it to be humna-readable depending on background colour
                 if(isColorDark(ns.getR(),ns.getG(),ns.getB())){
                     pay_view.setTextColor(Color.rgb(255,255,255));
                     note_view.setTextColor(Color.rgb(255,255,255));
@@ -159,7 +162,6 @@ public class AddPayment {
             ib.setImageResource(R.drawable.confirm_action);
         }
         else{
-
             LinearLayout layout = (LinearLayout) activity.findViewById(R.id.payment_layout);
             String payment_string = text.getText().toString();
 
@@ -167,8 +169,7 @@ public class AddPayment {
             if(i > -1) {
                 payment_string += "00";
                 String s = payment_string.substring(0, i);
-                //System.out.println(s);
-                //System.out.println(payment_string);
+
                 String sd = payment_string.substring(i + 1, i + 3);
                 payment_string = s + "." + sd;
             }else{
@@ -176,12 +177,12 @@ public class AddPayment {
             }
             if(!payment_string.equals("") && !payment_string.equals(".00")){
                 plus = !plus;
-                //layout.removeView(text);
+
                 String notes = notesText.getText().toString();
                 if(notes.equals("") || notes.isEmpty()){
                     notes = "None";
                 }
-                //add_pay_layout(payment_string, layout.getChildCount(), layout);
+
                 LinearLayout new_layout = new_layout(layout.getChildCount() + 1, current_date.getDay(), layout);
 
                 TextView pay_view = new_layout.findViewWithTag("Text");
@@ -219,6 +220,7 @@ public class AddPayment {
 
                 String add_string = payment_toString(payment_string, notes);
 
+                //Add the payment to the jsonhandler and save it to the users memory
                 jsonHandler.Json_add_spending(add_string);
                 SaveLoad sl = new SaveLoad();
                 sl.Save_Data(activity.getApplicationContext(), jsonHandler);
@@ -234,15 +236,11 @@ public class AddPayment {
                     totalText.setTextColor(Color.BLACK);
                 }
 
-
-
-
                 text.setVisibility(View.GONE);
                 notesText.setVisibility(View.GONE);
                 chk_incoming.setChecked(false);
                 chk_incoming.setVisibility(View.INVISIBLE);
 
-                //payment_counter++;
                 ImageButton ib = (ImageButton)activity.findViewById(R.id.imageButton);
                 ib.setImageResource(R.drawable.add_image);
                 activity.findViewById(R.id.spinDay).setVisibility(View.INVISIBLE);
@@ -266,6 +264,7 @@ public class AddPayment {
         }
     }
 
+    //Payment layout initializer
     private LinearLayout new_layout(int id, String wday, LinearLayout layout){
         final String weekday = wday;
         final LinearLayout newLayout = new LinearLayout(activity);
@@ -290,8 +289,7 @@ public class AddPayment {
         TextView dayTextView = new TextView(activity);
         Button b = new Button(activity);
         b.setText("Delete");
-        //b.setId(id);
-        //textView.setId(id);
+
         newLayout.setId(id);
 
         IndexInfo ii = new IndexInfo(id, day_counts[current_date.getDayInt(wday) - 1], wday);
@@ -305,7 +303,6 @@ public class AddPayment {
 
         b.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
-                //String jsonStringNum = Integer.toString();
                 int i = newLayout.getId();
                 removePayment(v, i);
             };
@@ -346,7 +343,6 @@ public class AddPayment {
 
         notesSpinner.setTextView(textView);
 
-
         try {
             NotesFunctions nf = new NotesFunctions();
             nf.Add_YearNotes(jsonHandler.get_year(2020));
@@ -366,10 +362,6 @@ public class AddPayment {
     void removePayment(View view, int id){
 
         LinearLayout layout = (LinearLayout) activity.findViewById(id);
-
-        //TextView tv = (TextView)layout.getChildAt(1);
-        //float f = Float.parseFloat(tv.getText().toString());
-        //add_to_total(-f);
 
         if(layout == null){
             return;

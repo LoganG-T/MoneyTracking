@@ -6,10 +6,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class JsonHandler {
 
@@ -36,10 +34,9 @@ public class JsonHandler {
         current_json = new JSONObject(json_string);
     }
 
+    //Empty constructor
     public JsonHandler() throws JSONException {
-        json_string = "{\"date\":[{\"week\":[1,2],\"year\":2020,\"days\":[[{\"weekday\":\"Monday\",\"day_spending\":" +
-                "{\"spending\":[10,20],\"notes\":[\"Takeaway\",\"Take-away\"]}}],[{\"weekday\":\"Monday\",\"day_spending\":" +
-                "{\"spending\":[30,40],\"notes\":[\"Takeaway3\",\"Take-away4\"]}}]]}]}";
+        json_string = "{\"date\":[]}";
         current_json = new JSONObject(json_string);
     }
 
@@ -47,7 +44,7 @@ public class JsonHandler {
 
         Calendar c = Calendar.getInstance();
         c.setTime(given_date);
-        //int year = c.get(Calendar.YEAR);
+
         int week_of_year = c.get(Calendar.WEEK_OF_YEAR);
 
         return week_of_year;
@@ -86,8 +83,7 @@ public class JsonHandler {
                 JSONArray weeks_spending = selected_obj.getJSONArray("days");
                 JSONArray new_data = new JSONArray();
                 WeekdayData wdd = new WeekdayData(json_obj.getString("weekday"), json_obj.getString("month"));
-                /*wdd.set_Weekday(json_obj.getString("weekday"));
-                wdd.set_Month(json_obj.getString("month"));*/
+
                 SpendingData spendingData = new SpendingData(json_obj.getJSONArray("amount"), json_obj.getJSONArray("notes"));
                 wdd.set_Spending(spendingData);
                 new_data.put(new JSONObject(wdd.toString()));
@@ -114,7 +110,6 @@ public class JsonHandler {
                         spending_data.put("spending", current_amount);
                         spending_data.put("notes", current_notes);
 
-                        //SpendingData current_spending = new SpendingData(spending_data.getJSONArray("amount"), spending_data.getJSONArray("notes"));
                         break;
                     }
                 }
@@ -181,7 +176,7 @@ public class JsonHandler {
         return true;
     }
 
-    int day_int(String day){
+    private int day_int(String day){
         switch(day){
             case("Sunday"):
                 return 1;
@@ -202,7 +197,7 @@ public class JsonHandler {
         }
     }
 
-    String month_string(int month){
+    private String month_string(int month){
         switch(month){
             case(1):
                 return "January";
@@ -233,20 +228,9 @@ public class JsonHandler {
         }
     }
 
-    private boolean Edit_order(){
-
-        return false;
-    }
-
-    private boolean Arrange_order(){
-
-        return false;
-    }
-
     //returns -1 if the year does not exist
     public int get_year_index(int year){
         try {
-            //JSONObject current_json = new JSONObject(json_string);
             for (int i = 0; i < current_json.getJSONArray("date").length(); i++){
                 JSONObject x = new JSONObject(current_json.getJSONArray("date").get(i).toString());
                 if(x.getInt("year") == year){
@@ -263,7 +247,7 @@ public class JsonHandler {
 
     public JSONObject get_year(int year) throws JSONException {
         JSONObject selected_obj = null;
-        //JSONArray date_json = new JSONObject(json_string).getJSONArray("date");
+
         JSONArray date_json = current_json.getJSONArray("date");
         //Accessing the year
         for(int i = 0; i < date_json.length(); i++){
@@ -292,7 +276,6 @@ public class JsonHandler {
 
     //Returns a JSONArray of the weekdays in the chosen week of the year -> or null if it does not exist
     public JSONArray get_week(int year, int week) throws JSONException {
-        JSONObject return_obj = null;
         int week_index = get_week_index(year, week);
         if(week_index < 0){
             return null;
@@ -309,7 +292,7 @@ public class JsonHandler {
         JSONObject year_obj = get_year(year);//put int week, put {} days
         JSONArray week_obj = year_obj.getJSONArray("week");
         week_obj.put(week);
-        //year_obj.put("week", week);
+
         JSONArray new_week = new JSONArray();
         JSONArray new_days = year_obj.getJSONArray("days");
         new_days.put(new_week);
@@ -345,7 +328,7 @@ public class JsonHandler {
 
     }
 
-    //{ "year":2020, "week":1, "weekday":"Monday", "index":1 }
+    //Example json::{ "year":2020, "week":1, "weekday":"Monday", "index":1 }
     public float delete_spending(String given_string) throws JSONException {
 
         float ret_f = 0f;
@@ -363,12 +346,11 @@ public class JsonHandler {
             remove_chosen_day(given_json.getString("weekday"), given_json.getInt("week"), given_json.getInt("year"));
         }
 
-
         return ret_f;
     }
 
     private boolean remove_chosen_day(String c_day, int c_week, int c_year){
-        JSONObject return_json = null;
+
         try {
             JSONArray days = get_week(c_year, c_week);
             if(days == null){
@@ -390,7 +372,7 @@ public class JsonHandler {
 }
 
 
-/*
+/* Example JSON
 {
 "date":
 	[

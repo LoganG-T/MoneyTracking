@@ -1,6 +1,5 @@
 package com.logan.moneytracking;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -41,29 +40,13 @@ public class TotalActivity extends AppCompatActivity {
             st.spinner_setup(2020, R.id.week_spin);
             SpinnerYear dd = new SpinnerYear(TotalActivity.this, this, dateObject);
             dd.spinner_setup(2020, R.id.year_spin);
-            SpinnerMonthOld spinnerMonth = new SpinnerMonthOld(TotalActivity.this, this, totalHandler);
+            SpinnerMonthTotals spinnerMonth = new SpinnerMonthTotals(TotalActivity.this, this, totalHandler);
             spinnerMonth.spinner_setup(R.id.month_total);
             total_display();
         } catch (JSONException e) {
             //Large error here the program is no good
         }
-        //String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-
-        // Capture the layout's TextView and set the string as its text
-        //TextView textView = findViewById(R.id.textView);
-        //textView.setText(message);
     }
-
-    /*
-        public void load_total_buttons(final TotalHandler totalHandler){
-        Button day_button = (Button)activity.findViewById(R.id.day_total);
-        day_button.setOnClickListener(new View.OnClickListener(){
-            public void onClick(View v){
-                totalHandler.get_day_total(current_day, current_week, current_year);
-            }
-        });
-    }
-     */
 
     private void total_display(){
         TextView textView = (TextView)findViewById(R.id.totalDisplay);

@@ -11,7 +11,9 @@ import java.util.Map;
 
 public class NotesFunctions {
 
-    String inc_all = "All";
+    private String inc_all = "All";
+    private ArrayList<SpendingCount> spending_notes;
+    private float total_spending;
 
     public NotesFunctions(){
         spending_notes = new ArrayList<SpendingCount>();
@@ -23,17 +25,6 @@ public class NotesFunctions {
         total_spending = 0f;
     }
 
-    ArrayList<SpendingCount> spending_notes;
-    float total_spending;
-
-    public void load_note_count(){
-
-    }
-
-    public void save_note_count(){
-
-    }
-
     public void remove_note(String s){
         for(int i = 0; i < spending_notes.size(); i++){
             if(spending_notes.get(i).check_note(s)){
@@ -41,10 +32,6 @@ public class NotesFunctions {
                 break;
             }
         }
-    }
-
-    public void group_notes(){
-
     }
 
     public void add_note(String s){
@@ -63,7 +50,7 @@ public class NotesFunctions {
             spending_notes.add(sc);
         }
     }
-    public void add_note(String s, float f){
+    private void add_note(String s, float f){
         //Go through all notes in this json object and group by the notes
         //Reduce the current word by 1 incase it ends in s
         boolean b = false;
@@ -90,6 +77,7 @@ public class NotesFunctions {
     public ArrayList<SpendingCount> get_allNotes(){
         return spending_notes;
     }
+
     /*
     {"spending":[],"notes":[]}
      */
@@ -117,6 +105,7 @@ public class NotesFunctions {
     public float Get_TotalSpending(){
         return total_spending;
     }
+
     /*
     [{"weekday":"Monday","month":"December","day_spending":{"spending":[],"notes":[]}},
     {"weekday":"Wednesday","month":"January","day_spending":{"spending":["15.5"],"notes":["Tesco"]}}]
@@ -178,6 +167,7 @@ public class NotesFunctions {
         String note;
         int count;
         float total_spent;
+
         public SpendingCount(String n){
             n = n.toLowerCase();
             n = n.substring(0, 1).toUpperCase() + n.substring(1);
@@ -185,6 +175,7 @@ public class NotesFunctions {
             count = 1;
             total_spent = 0f;
         }
+
         public SpendingCount(String n, float spent){
             n = n.toLowerCase();
             n = n.substring(0, 1).toUpperCase() + n.substring(1);
@@ -200,6 +191,7 @@ public class NotesFunctions {
         public void add_count(){
             count++;
         }
+
         public void add_count(float spent){
             count++;
             total_spent += spent;
@@ -208,9 +200,11 @@ public class NotesFunctions {
         public void reduce_count(){
             count--;
         }
+
         public String getNote(){
             return note;
         }
+
         public float getSpending(){
             return total_spent;
         }

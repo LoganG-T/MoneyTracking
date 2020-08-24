@@ -41,6 +41,8 @@ public class NotesActivity extends AppCompatActivity {
                 year_notes.Add_WeekNotes(year_arr.getJSONArray(i));
             }
             notesSpinner = new NotesSpinner(this, getApplicationContext());
+
+            //Creating thread to wait on the spinner data to be loaded before set
             WaitThread t = new WaitThread(notesSpinner, year_notes);
             t.start();
             t.join();
@@ -63,14 +65,13 @@ public class NotesActivity extends AppCompatActivity {
 
             update_pageData();
 
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (InterruptedException e) {
+        } catch (JSONException | InterruptedException e) {
             e.printStackTrace();
         }
 
     }
 
+    //Thread class to wait for the full noteSpinner data to be obtained before trying to load the spinner
     private class WaitThread extends Thread{
         NotesSpinner notesSpinner;
         NotesFunctions year_notes;

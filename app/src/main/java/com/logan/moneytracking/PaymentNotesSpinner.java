@@ -30,9 +30,6 @@ public class PaymentNotesSpinner extends NotesSpinner {
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 
-        //  System.out.println("POS " + position);
-        //load_page.setCurrent_week(position + 1);
-        //load_page.set_dates();
         latest_position = position;
         update_output();
     }

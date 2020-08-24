@@ -35,10 +35,6 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
 
     public GraphDraw(Context context, AttributeSet attrs) {
         super(context, attrs);
-        /*
-        setFocusable(true);
-        setFocusableInTouchMode(true);
-         */
         holder = getHolder();
 
         holder.addCallback(this);
@@ -50,6 +46,7 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
         width = size.x;
         height = size.y;
 
+        //Default colours for if the user has not set up personalized colours
         c_array = new int[12];
 
         c_array[0] = Color.rgb(255,61,61);
@@ -75,31 +72,6 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
         drawPaint.setStrokeJoin(Paint.Join.ROUND);
         drawPaint.setStrokeCap(Paint.Cap.ROUND);
     }
-
-    /*use for view not surfaceview
-    @Override
-    public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-
-        if (changed) {
-            System.out.println("DRAW NOW");
-            canvas.drawCircle(width / 2, width / 4, width / 4, drawPaint);
-            //drawPaint.setColor(Color.GREEN);
-            int x_center = width / 2;
-            int y_center = width / 4;
-            int circle_diameter = width / 2;
-            for (int y = (width / 4) - (width / 4); y < (width / 4) + (width / 4); y++) {
-                for (int x = (width / 2) - (width / 4); x < (width / 2) + (width / 4); x++) {
-                    if ((x - x_center) * (x - x_center) + (y - y_center) * (y - y_center) <= circle_diameter / 2 * circle_diameter / 2) {
-                        drawPaint.setColor(Chart_Colours(x,y,x_center, y_center));
-                        canvas.drawPoint(x, y, drawPaint);
-                    }
-                }
-            }
-            changed = false;
-        }
-    }
-    */
 
     public void Set_PieChart(HashMap<String, Float> given_percents, String[] given_names){
         if(given_names == null || given_names.length == 0){
@@ -166,12 +138,11 @@ public class GraphDraw extends SurfaceView implements SurfaceHolder.Callback {
         }
         if (changed) {
             Canvas canvas = holder.lockCanvas();
-            //canvas.drawCircle((width / 8) + 5, width / 8, width / 8, drawPaint);
-            //drawPaint.setColor(Color.GREEN);
+
             int x_center = (width / 8) + 5;
             int y_center = (width / 8) + 5;
             int circle_diameter = width / 4;
-            for (int y = y_center - y_center; y < y_center + y_center; y++) {
+            for (int y = 0; y < y_center + y_center; y++) {
                 for (int x = x_center - x_center; x < x_center + x_center; x++) {
                     if ((x - x_center) * (x - x_center) + (y - y_center) * (y - y_center) <= circle_diameter / 2 * circle_diameter / 2) {
                         drawPaint.setColor(Chart_Colours(x,y,x_center, y_center));

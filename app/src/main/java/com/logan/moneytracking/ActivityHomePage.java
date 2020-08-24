@@ -28,17 +28,16 @@ public class ActivityHomePage extends AppCompatActivity {
         SaveLoad sl = new SaveLoad();
         JsonHandler js;
 
+        //Loading the apps data, or creating it if it doesn't exist
         boolean isFilePresent = sl.check_file(getApplicationContext(), "storage.json");
         if(isFilePresent) {
             String jsonString = sl.Load_Data(getApplicationContext(), "storage.json");
             System.out.println("FILE PRESENT");
             System.out.println(jsonString);
 
-            //do the json parsing here and do the rest of functionality of app
         } else {
             boolean isFileCreated = sl.Create_Data(getApplicationContext(), "storage.json", "");
             if(isFileCreated) {
-                //proceed with storing the first todo  or show ui
             } else {
                 //show error or try again.
             }

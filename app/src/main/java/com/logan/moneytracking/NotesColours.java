@@ -17,19 +17,18 @@ import java.io.InputStreamReader;
 
 public class NotesColours {
 
-    String FILENAME = "n_colours.json";
+    private String FILENAME = "n_colours.json";
     Context context;
-    JSONObject note_data;
+    private JSONObject note_data;
 
     public NotesColours(Context c){
         context = c;
     }
 
     public boolean Save(String note, int r, int g, int b){
-        //delete_file(context);
+
         Colour_Data cd = new Colour_Data(r, g, b);
         Note_Colour noteColour = new Note_Colour(note, cd);
-        System.out.println(note + " JSON COLOUR DATA");
 
         try {
             JSONObject jsonObject = new JSONObject(Load());
@@ -49,21 +48,17 @@ public class NotesColours {
 
             fos.write(jsonObject.toString().getBytes());
             fos.close();
-            //save now
+            //saved now
 
             return true;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
         return false;
     }
 
 
-    public String Load(){
+    private String Load(){
         if(Check_File()){
             try {
                 FileInputStream fis = context.openFileInput(FILENAME);
@@ -75,8 +70,6 @@ public class NotesColours {
                     sb.append(line);
                 }
                 return sb.toString();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -108,13 +101,13 @@ public class NotesColours {
                 }
             }
         } catch (JSONException e) {
-        }
 
+        }
 
         return cd;
     }
 
-    public boolean Check_Existing(String s, JSONObject jsonObject){
+    private boolean Check_Existing(String s, JSONObject jsonObject){
         JSONArray jsonArray = null;
         try {
             jsonArray = jsonObject.getJSONArray("notes");
@@ -131,13 +124,13 @@ public class NotesColours {
         return false;
     }
 
-    public boolean Check_File(){
+    private boolean Check_File(){
         String path = context.getFilesDir().getAbsolutePath() + "/" + FILENAME;
         File file = new File(path);
         return file.exists();
     }
 
-    public boolean New_File(){
+    private boolean New_File(){
 
         //String default_json = "{\"date\":[{\"week\":[1, 2],\"year\": 2020,\"days\":[[{\"weekday\": \"Monday\",\"day_spending\":{\"spending\":[\"10.00\", \"20.00\"],\"notes\": [\"Takeaway\", \"Take-away\"]}}],[{\"weekday\":\"Monday\",\"day_spending\":{\"spending\": [\"30.00\", \"40.00\"],\"notes\":[\"Takeaway3\",\"Take - away4\"]}}]]}]}";
         String default_json = "{notes:[]}";

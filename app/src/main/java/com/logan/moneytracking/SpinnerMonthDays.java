@@ -34,16 +34,11 @@ public class SpinnerMonthDays extends SpinnerTotals {
     int spin;
     int last_selected = 0;
 
-    public void set_month_req(int r){
-        r_id = r;
-    }
-
     public void update_days(){
         if(adapter != null) {
             adapter.clear();
             adapter.addAll(get_days());
         }
-        //spinner_setup(spin);
     }
 
     public void set_select(){
@@ -78,8 +73,6 @@ public class SpinnerMonthDays extends SpinnerTotals {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        //Need to minus 1 because it is zero-index'd
-        //spinner.setSelection(0);
     }
 
     private void update_date(int position){
@@ -101,18 +94,13 @@ public class SpinnerMonthDays extends SpinnerTotals {
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 
-        //  System.out.println("POS " + position);
-        //load_page.setCurrent_week(position + 1);
-        //load_page.set_dates();
         update_date(position);
 
         last_selected = position;
 
         if(month_req){
             activity.findViewById(r_id).setVisibility(View.VISIBLE);
-        }/*else{
-            month_req = true;
-        }*/
+        }
     }
 
 }

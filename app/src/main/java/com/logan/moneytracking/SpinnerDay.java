@@ -31,17 +31,14 @@ public class SpinnerDay extends SpinnerTotals {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        //Need to minus 1 because it is zero-index'd
+
         spinner.setSelection(0);
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
 
-        //  System.out.println("POS " + position);
-        //load_page.setCurrent_week(position + 1);
         current_date.setDay(position + 1);
-        //load_page.set_dates();
     }
 
 }

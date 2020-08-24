@@ -17,12 +17,6 @@ import java.util.ArrayList;
 
 public class SaveLoad {
 
-    //private Context context;
-
-    public void Save_Data(){
-
-    }
-
     //Returns null if there is no week data in the json string, otherwise returns the week data of that year
     private WeekData extract_year_data(String json_string){
         try {
@@ -59,34 +53,6 @@ public class SaveLoad {
         }
         return false;
     }
-
-
-    /*private boolean delete(int val){
-        String FILENAME = "storage.json";
-        String jsonString = Load_Data(getApplicationContext(), FILENAME);
-        TextView tv = (TextView) findViewById(R.id.textView12);
-        tv.setText("Delete start");
-        try {
-            JSONObject jsonObj = new JSONObject(jsonString);
-            JSONObject weeksNum = new JSONObject(jsonString).getJSONObject("week_values").getJSONObject(chosen_week);
-            int oldAmount = weeksNum.getInt("amount");
-            weeksNum.put("amount", oldAmount - 1);
-            JSONArray x = weeksNum.getJSONArray("values");
-            x.remove(val);
-            weeksNum.put("values", x);
-            jsonObj.getJSONObject("week_values").put(chosen_week, weeksNum);
-            FileOutputStream fos = getApplicationContext().openFileOutput(FILENAME,Context.MODE_PRIVATE);
-            fos.write(jsonObj.toString().getBytes());
-            fos.close();
-            tv.setText("Saved");
-            return true;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return false;
-    }*/
 
     public String Load_Data(Context context, String file_name){
         try {

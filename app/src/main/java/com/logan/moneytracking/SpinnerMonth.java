@@ -28,7 +28,6 @@ public class SpinnerMonth extends SpinnerTotals {
         current_date = d;
     }
 
-    //boolean month_req = false;
     int r_id;
     SpinnerMonthDays day_spin;
 
@@ -55,16 +54,12 @@ public class SpinnerMonth extends SpinnerTotals {
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        //Need to minus 1 because it is zero-index'd
+
         spinner.setSelection(current_date.getMonthInt());
     }
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-
-        //  System.out.println("POS " + position);
-        //load_page.setCurrent_week(position + 1);
-        //load_page.set_dates();
 
         current_date.setMonth(get_full_month(position));
 
@@ -74,7 +69,6 @@ public class SpinnerMonth extends SpinnerTotals {
             activity.findViewById(r_id).setVisibility(View.VISIBLE);
             day_spin.update_days();
         }
-
     }
 
 }

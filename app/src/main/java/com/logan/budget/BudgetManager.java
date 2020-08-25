@@ -24,12 +24,6 @@ public class BudgetManager {
     Calendar c;
     JSONObject all_budgets;
 
-    /*public BudgetManager(float amount, DateObject start_date, DateObject end_date){
-        //Sets a new budget for the dates between start_date and end_date
-        budget = new Budget("temp_name", amount, start_date, end_date);
-        c = Calendar.getInstance();
-    }*/
-
     public  BudgetManager(){
 
     }
@@ -74,6 +68,7 @@ public class BudgetManager {
         return false;
     }
 
+    //Returns a string value of the integer week diference between the budget start and the given date
     public String get_startDiff(DateObject d){
         String s = "";
 
@@ -123,13 +118,9 @@ public class BudgetManager {
             return 0f;
         }
         if(jsonHandler != null){
-            //return budget.get_weekly_budget() - jsonHandler.week_spending(c.get(Calendar.YEAR), c.get(Calendar.WEEK_OF_YEAR));
-            System.out.println("WEEKLY NOW " + b.get_weekly_budget() + " " + jsonHandler.week_spending(get_date.getYear(), get_date.getWeek()));
-            System.out.println("CURRENT WEEK NOW " + b.get_current_week() + " " + jsonHandler.week_spending(get_date.getYear(), get_date.getWeek()));
-            return b.get_current_week() - jsonHandler.week_spending(get_date.getYear(), get_date.getWeek());
+            return b.get_weekly_budget();
         }
         return b.get_weekly_budget();
-        //budget.get_current_week();
     }
 
     public void update_spending(){
@@ -142,6 +133,11 @@ public class BudgetManager {
         }
 
         budget.update_spending(spent);
+        try {
+            current_budget.put("left_budget", spent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public float get_weekSpending(DateObject c_date){
@@ -175,6 +171,7 @@ public class BudgetManager {
         }
     }
 
+    //Returns JSONObject of the budget with the selected name or null if it does not exist
     public JSONObject find_budget(String s) throws JSONException {
         JSONObject jsonObject = null;
         JSONArray array = all_budgets.getJSONArray("budgets");
@@ -192,7 +189,7 @@ public class BudgetManager {
         try {
             System.out.println(all_budgets.toString());
             JSONArray budget_arr = all_budgets.getJSONArray("budgets");
-            if(budget_arr == null){
+            if(budget_arr.length() == 0){
                 return false;
             }
             for(int i = 0; i < budget_arr.length(); i++){
@@ -241,6 +238,7 @@ public class BudgetManager {
         return false;
     }
 
+    //Increase a budgets total value with an incoming payment
     public boolean add_to_total_budget(String budget_name, String json_name, String up_value){
 
         try {
@@ -307,9 +305,6 @@ public class BudgetManager {
         String jsonString = budget.getString();
 
         try {
-
-            //JSONObject jsonObj = new JSONObject(jsonString);
-            //all_budgets.getJSONArray("budgets").put(jsonObj);
 
             FileOutputStream fos = context.openFileOutput(FILENAME, Context.MODE_PRIVATE);
             fos.write(all_budgets.toString().getBytes());

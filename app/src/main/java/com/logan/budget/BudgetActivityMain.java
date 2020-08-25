@@ -51,16 +51,4 @@ public class BudgetActivityMain extends AppCompatActivity {
         }
     }
 
-    public void view_totals(View view) {
-        Intent intent = new Intent(this, TotalActivity.class);
-
-        startActivity(intent);
-    }
-
-    public void notes_totals(View view){
-        Intent intent = new Intent(this, NotesActivity.class);
-
-        startActivity(intent);
-    }
-
 }

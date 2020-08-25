@@ -46,7 +46,6 @@ public class BudgetMuiltiChoiceSpinner extends AppCompatActivity{
             return;
         }
 
-        //Need to minus 1 because it is zero-index'd
         Spinner spinner = (Spinner) activity.findViewById(given_spinner);
 
         budget_list = new ArrayList<>();
@@ -64,8 +63,6 @@ public class BudgetMuiltiChoiceSpinner extends AppCompatActivity{
         BudgetMultiChoiceAdapter myAdapter = new BudgetMultiChoiceAdapter(main_context, 0,
                 budget_list);
         spinner.setAdapter(myAdapter);
-
-        //spinner.setSelection(0);
     }
 
 

@@ -47,11 +47,9 @@ public class Budget {
         update_week_auto();
     }
 
-    /*public void recieve(float amount){
-        left_budget -= amount;
-    }*/
-
     public void update_spending(float amount){
+
+        System.out.println("UPDATE SPENDING : " + amount);
         left_budget = amount;
     }
 
@@ -83,7 +81,6 @@ public class Budget {
         else{
             //different years
         }
-        //weeks_gone += 1;
     }
 
     public float get_remainingBudget(){
@@ -96,18 +93,22 @@ public class Budget {
 
     public float get_original_weekly_budget(){
         if(term_time <= 1){
-            return (int)(total_budget / (float)weeks_gone * 100);
+            return (int)((total_budget / (float)weeks_gone) * 100);
         }
-        int x = (int)(total_budget / (float)(term_time + weeks_gone) * 100);
+        int x = (int)(total_budget / (float)(term_time) * 100);
         return (float)x / 100f;
     }
 
     public float get_weekly_budget(){
         //returns the termly payments for the budget
-        if(term_time <= 1){
-            return total_budget;
+        if(left_budget == 0){
+            // left_budget =
         }
-        int x = (int)(total_budget / (float)term_time * 100);
+        if(term_time <= 1){
+            return get_remainingBudget();
+        }
+        System.out.println("WEEK BUDHGET __> " + get_remainingBudget() + " " + term_time + " " + weeks_gone + " " + (term_time - weeks_gone) + " | " + total_budget + " " + left_budget);
+        int x = (int)((get_remainingBudget() / (float)(term_time - weeks_gone)) * 100);
         return (float)x / 100f;
     }
 

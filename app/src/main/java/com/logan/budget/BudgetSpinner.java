@@ -10,7 +10,6 @@ import android.widget.Spinner;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.Calendar;
 
 public class BudgetSpinner extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -50,7 +49,7 @@ public class BudgetSpinner extends AppCompatActivity implements AdapterView.OnIt
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-        //Need to minus 1 because it is zero-index'd
+
         spinner.setSelection(0);
     }
 
@@ -60,7 +59,7 @@ public class BudgetSpinner extends AppCompatActivity implements AdapterView.OnIt
 
     @Override
     public void onItemSelected(AdapterView<?> parent, View v, int position, long id) {
-        //Set name
+        //Must set budget name
         budgetManager.select_budget(names[position]);
         if(editActivity != null){
             editActivity.Display_Budget(names[position]);

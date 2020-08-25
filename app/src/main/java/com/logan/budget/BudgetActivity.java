@@ -45,14 +45,11 @@ public class BudgetActivity extends AppCompatActivity {
             start_date = new DateObject(calendar.get(Calendar.DAY_OF_WEEK), calendar.get(Calendar.WEEK_OF_YEAR), current_year);
             end_date = new DateObject(calendar.get(Calendar.DAY_OF_WEEK), calendar.get(Calendar.WEEK_OF_YEAR) + 1, current_year);
 
-            //Set the spinners for the start day, month year
             set_year_spinner(R.id.start_year, R.id.start_month, start_date);
             set_year_spinner(R.id.end_year, R.id.end_month, end_date);
 
             set_month_spinner(R.id.start_month, R.id.start_day, start_date);
             set_month_spinner(R.id.end_month, R.id.end_day, end_date);
-
-            //Spinner spin = (Spinner) findViewById(R.id.start_month);
 
         } catch (JSONException e) {
             //Large error here the program is no good
@@ -85,7 +82,6 @@ public class BudgetActivity extends AppCompatActivity {
         EditText editName = (EditText)findViewById(R.id.bd_budgetName);
         if(editName.getText().toString().isEmpty()){
             //Display error saying it cannot be empty
-            System.out.println("NO EMPTY ALLOWED");
             return;
         }
 
@@ -125,17 +121,10 @@ public class BudgetActivity extends AppCompatActivity {
 
         budgetManager.set_new_budget(editName.getText().toString(), amount, start_date, end_date);
 
-
-
         budgetManager.set_jsonHandler(jsonHandler);
         textAmount.setText(Float.toString(budgetManager.get_week_full_budget(start_date.getYear(), start_date.getWeek())));
         textLeft.setText(Integer.toString(budgetManager.get_weeks_left()));
         budgetManager.save_budget(this);
-        System.out.println("Saved");
-        System.out.println(budgetManager.load_budget(this));
-
-        //System.out.println(budgetManager.);
-
     }
 
 }

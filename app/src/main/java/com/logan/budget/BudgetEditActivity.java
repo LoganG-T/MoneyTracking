@@ -155,6 +155,7 @@ public class BudgetEditActivity extends AppCompatActivity {
 
         DateObject end = new DateObject(c_e);
 
+        //Only save and update the budget if all of the changes are successfully made
         boolean x = budgetManager.update_budget("name", t_name.getText().toString());
         x = x && budgetManager.update_budget("total_budget", t_value.getText().toString());
         x = x && budgetManager.update_budget("start_date", start);

@@ -1,9 +1,7 @@
 package com.logan.budget;
 
-import android.app.Activity;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.view.View;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,7 +27,7 @@ public class BudgetViewActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_budget_view);
-        //budgetManager = new BudgetManager(jsonBudget);
+
         c = Calendar.getInstance();
         JsonHandler jsonHandler = null;
         try {
@@ -74,7 +72,6 @@ public class BudgetViewActivity extends AppCompatActivity {
         if(s.length() > 8){
             s+="\n";
         }
-        //c2.set(Calendar.DAY_OF_WEEK, 2);
         c2.add(Calendar.DAY_OF_WEEK, 6);
         s += c2.get(Calendar.DAY_OF_MONTH);
 
@@ -87,6 +84,7 @@ public class BudgetViewActivity extends AppCompatActivity {
     public void select_budget(View view){
         set_currentDate();
 
+        //Check if the date is before or after the budgets chosen start/end dates
         if(budgetManager.budget_ended(new DateObject(c))){
             System.out.println("BUDGET OVER");
             TextView textView = (TextView) findViewById(R.id.txt_remoney);
@@ -99,15 +97,18 @@ public class BudgetViewActivity extends AppCompatActivity {
             textView.setText("Budget starts in " + budgetManager.get_startDiff(d) + " weeks.");
             textView.setTextColor(Color.rgb(0,0,0));
         }
+        //Date is between the allowed budgets dates
         else {
             DateObject d = new DateObject(c);
             DateObject current_date = new DateObject(Calendar.getInstance());
             String pay_display = "";
             TextView textView = (TextView) findViewById(R.id.txt_remoney);
             float f = 0;
+            //displayed date is before the current week so display spent data
             if(d.before(current_date)){
                 float temp_f = budgetManager.get_weekSpending(d);
                 pay_display = Float.toString( temp_f) + " spent";
+                pay_display += "  " + budgetManager.get_original_week_budget();
                 if(temp_f > budgetManager.get_original_week_budget()){
                     textView.setTextColor(Color.rgb(255,50,50));
                 }else{
@@ -117,9 +118,11 @@ public class BudgetViewActivity extends AppCompatActivity {
                 pay_display = "0 Budget has all been spent.";
                 textView.setTextColor(Color.rgb(255,50,50));
             }
+            //chosen date is current or future and allowed so display the allowed remaining budget spending
             else {
                 f = budgetManager.get_current_week_budget(d);
                 pay_display = Float.toString((int)(f * 100) / 100f);
+                pay_display += "  " + budgetManager.get_original_week_budget();
 
             }
             textView.setText(cur_symb + pay_display);
